@@ -7,7 +7,7 @@ import Newsletter from '../components/Newsletter';
 
 const Home = () => {
   return (
-    <div className="">
+    <div className="flex-1">
       <MainSection />
       <WhyThisCourse />
       <Testimonials />

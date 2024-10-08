@@ -14,7 +14,7 @@ const Header = () => {
   };
 
   return (
-    <div className='flex justify-between shadow-lg items-center p-5 pl-24 text-lg pt-5 pb-5'>
+    <div className='flex justify-between shadow-lg items-center p-5 pl-24 text-lg pt-3 pb-3'>
       <div>
                 <Link to='/'>
                     <img src='/logo.jpeg' alt='Logo' className='h-[55px]' /> 
@@ -22,7 +22,6 @@ const Header = () => {
             </div>
       <nav>
         <ul className='flex flex-row items-center space-x-12 pr-10 font-medium'>
-          {/* <li><Link to='/'>Home</Link></li> */}
           <li><Link to='/about'>About Us</Link></li>
           <li><Link to='/ourofferings'>Our Offerings</Link></li>
 
@@ -40,7 +39,7 @@ const Header = () => {
             <>
               <li><Link to='/login'>Login</Link></li>
               <li>
-                <Link to='/signup' className='bg-black text-white px-4 py-3 rounded-md text-sm'>
+                <Link to='/signup' className='bg-green-500 text-white px-4 py-3 rounded-md text-sm'>
                   Register
                 </Link>
               </li>
