@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Create a User Schema
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -10,36 +9,48 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true, // Ensures no duplicate email addresses
+    unique: true,
     match: [
       /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
       'Please provide a valid email address',
     ],
   },
-  mobileNumber: {
+  phone: {
     type: String,
-    required: [true, 'Mobile number is required'],
     match: [
-      /^[0-9]{10}$/, // Validates mobile number to be a 10-digit number
+      /^[0-9]{10}$/,
       'Mobile number must be a valid 10-digit number',
     ],
+    required: true,  // Now optional for first step
   },
-  currentOccupation: {
+  occupation: {
     type: String,
-    required: [true, 'Current occupation is required'],
-    enum: ['Student', 'Professional'], // Dropdown options
+    enum: ['Student', 'Professional'],
+    required: true,  // Now optional for first step
   },
-  instituteOrOrganizationName: {
+  institution: {
     type: String,
-    required: [true, 'Institute or Organization name is required'],
+    required: true,  // Now optional for first step
   },
   password: {
     type: String,
-    required: true,
+    required: true,  // Now optional for first step
+  },
+  isVerified: {
+    type: Boolean,
+    default: true,
+  },
+  otp: {
+    type: String,
+  },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpires: {
+    type: Date,
   },
 });
 
-// Create and export the User model
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

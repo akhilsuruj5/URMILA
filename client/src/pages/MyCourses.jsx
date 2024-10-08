@@ -7,7 +7,7 @@ const MyCourses = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem('token'); // Get the stored token
+      const token = localStorage.getItem('token'); 
 
       if (!token) {
         setError('No token found, please log in again.');
@@ -15,14 +15,13 @@ const MyCourses = () => {
       }
 
       try {
-        // Fetch user details using the token in the Authorization header
         const response = await axios.get('http://localhost:5000/user', {
           headers: {
-            Authorization: `Bearer ${token}`, // Send the token as a Bearer token
+            Authorization: `Bearer ${token}`, 
           },
         });
         
-        setUser(response.data); // Set user data in state
+        setUser(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
         setError('Error fetching user details');
