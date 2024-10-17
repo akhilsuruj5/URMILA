@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useAuth } from "../Context/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // Loader state
   const navigate = useNavigate();
   const { isAuthenticated, login } = useAuth();
 
@@ -19,6 +21,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loader to true when request starts
+
     try {
       const response = await axios.post("http://localhost:5000/login", {
         email,
@@ -29,25 +33,30 @@ const Login = () => {
 
       localStorage.setItem("token", token);
       login(token);
-      setMessage(msg);
       setError("");
 
+      // Toast notification on successful login
+      toast.success("Login successful! Redirecting to My Courses...");
+
+      setLoading(false); // Stop loader
       navigate("/mycourses");
     } catch (err) {
-      setError(err.response?.data?.msg || "Error logging in");
-      setMessage("");
+      const errorMessage = err.response?.data?.msg || "Error logging in";
+      setError(errorMessage);
+      setLoading(false); // Stop loader when there's an error
+
+      // Toast notification on error
+      toast.error(errorMessage);
     }
   };
 
   return (
     <div className="flex justify-end h-screen pr-36">
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} />
       <div className="w-full max-w-md pt-28 rounded-lg p-6">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
           Login
         </h2>
-
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        {message && <p className="text-green-500 mb-4">{message}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -90,10 +99,19 @@ const Login = () => {
             <button
               type="submit"
               className="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring focus:ring-blue-500"
+              disabled={loading} // Disable the button while loading
             >
-              Login
+              {loading ? "Logging in..." : "Login"} {/* Show loader text */}
             </button>
           </div>
+
+          {loading && (
+            <div className="text-center mt-4">
+              {/* Loader Spinner */}
+              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p>Processing your login...</p>
+            </div>
+          )}
 
           <p className="text-center mt-4">
             New User?{" "}

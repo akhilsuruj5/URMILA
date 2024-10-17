@@ -27,7 +27,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonials" className="px-60 pb-32 py-16 bg-gradient-to-r from-green-400 via-green-500 to-green-600 text-whit">
+    <section id="testimonials" className="px-60 pb-32 py-16 bg-gradient-to-r from-green-400 via-green-600 to-green-600 text-whit">
       <div className="container">
         <h2 className="text-white text-3xl pb-10 font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">
           Testimonials

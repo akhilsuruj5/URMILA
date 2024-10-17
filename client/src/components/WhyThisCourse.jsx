@@ -11,7 +11,7 @@ const WhyThisCourse = () => {
   ];
 
   return (
-    <section className="py-32 bg-white mx-40">
+    <section className="py-32 mx-40">
       <div className="container px-4">
         <h2 className="text-3xl font-bold pb-12 tracking-tighter sm:text-4xl md:text-5xl text-center mb-8 text-green-600">
           Why This Course?
