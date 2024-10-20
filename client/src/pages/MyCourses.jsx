@@ -4,6 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router';
+import Loader from '../components/Loader';
 
 // Mock data for enrolled and all courses
 const enrolledCourses = [
@@ -41,7 +42,7 @@ const allCourses = [
     description:
       "Gain insights into the processes and documentation essential for freight forwarding.",
     enrolled: false,
-    image: "/course3.png?height=100&width=200",
+    image: "/transport.jpg?height=100&width=200",
   },
   {
     id: 4,
@@ -49,7 +50,7 @@ const allCourses = [
     description:
       "Enhance your leadership skills in overseeing complex logistics and supply chain operations.",
     enrolled: false,
-    image: "/course4.png?height=100&width=200",
+    image: "/course3.png?height=100&width=200",
   },
 ];
 
@@ -78,13 +79,16 @@ const [searchTerm, setSearchTerm] = useState("");
 const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState("all");
 
+
+  const [isLoading , setIsLoading] = useState(false)
   useEffect(() => {
     const fetchUserData = async () => {
       let token = localStorage.getItem('token');
-  
+      
       if (!token) {
         setError('User not found, please log in again.');
         toast.error('User not found, please log in again.');
+
         return;
       }
   
@@ -96,6 +100,7 @@ const navigate = useNavigate()
         });
   
         setUser(response.data);
+        
       } catch (error) {
         console.error('Error fetching user data:', error);
         if (error.response && error.response.status === 401) {
@@ -131,19 +136,56 @@ const navigate = useNavigate()
   
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className='text-center py-10 text-xl'>{error}</div>;
   }
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div className="pt-20"><Loader /></div>;
   }
 
   const filteredAllCourses = allCourses.filter((course) =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
+  const handleEnroll = async (courseId , title) => {
+    setIsLoading(true);
+    const userData = {
+      name: user._doc.name,
+      email: user._doc.email,
+      phone: user._doc.phone,
+      occupation: user._doc.occupation,
+      institution: user._doc.institution,
+      title: title,
+    };
+    let token = localStorage.getItem('token');
+    
+    try {
+      const response = await axios.post('http://localhost:5000/send-email', {
+        userData
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        toast.success('Enrollment initiated! A confirmation email has been sent.');
+      }
+      setIsLoading(false);
+      navigate('/enrollment-confirmed');
+    } catch (error) {
+      console.error('Error enrolling in course:', error);
+      toast.error('Failed to enroll. Please try again.');
+    }
+  };
+
+  if(isLoading )
+    return <div className="pt-20">
+      <Loader />
+    </div>
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 pb-20 pt-6 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-white pb-20 pt-6 to-white">
       <ToastContainer /> 
       <main className="container mx-auto px-4 py-8">
         <section className="mb-12">
@@ -206,9 +248,9 @@ const navigate = useNavigate()
                 height={100}
                 className="w-full h-40 object-cover"
               />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold mb-2">{course.title}</h3>
-                <p className="text-gray-600 mb-4 h-12 overflow-hidden">
+              <div className="p-4 flex flex-col justify-evenly">
+                <h3 className="text-xl font-semibold mb-2 line-clamp-3 h-16">{course.title}</h3>
+               <p className="text-gray-600 mb-4 h-12 overflow-hidden">
                   {course.description}
                 </p>
                 <button
@@ -219,7 +261,9 @@ const navigate = useNavigate()
                   }`}
 
                   onClick={() => {
-                    navigate('/enrollment-confirmed') }}
+                      handleEnroll(course.id , course.title);
+                      
+                  }}
                 >
                   {course.enrolled ? "Continue Learning" : "Enroll Now"}
                 </button>

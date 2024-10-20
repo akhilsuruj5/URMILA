@@ -365,19 +365,95 @@ app.post("/reset-password/:token", async (req, res) => {
 app.get("/user", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id; // Get user ID from the authentication middleware
-    const user = await User.findById(userId).select("name email"); // Adjust fields as needed
+    const user = await User.findById(userId).select("name email _id phone occupation institution "); // Adjust fields as needed
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
-
-    res.status(200).json({ name: user.name, email: user.email });
+    // console.log(user)
+    res.status(200).json({ ...user });
   } catch (error) {
     console.error("Error fetching user:", error);
     res.status(500).json({ msg: "Error fetching user" });
   }
 });
 
+app.post('/send-email', async (req, res) => {
+  const { name, email, phone, occupation, institution, title } = req.body.userData;
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  // Email content for user and admin
+  const userEmailContent = `
+  <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
+    <h2 style="color: #333;">Hi ${name},</h2>
+    <p style="color: #555;">
+      You have initiated course registration for <strong style="color: #0056b3;">${title}</strong>.
+    </p>
+    <p style="color: #555;">
+      Thank you for your interest! We will process your request shortly.
+    </p>
+    <p style="color: #555;">
+      You will receive a call from us within the next 24 hours to assist you further.
+    </p>
+    <footer style="margin-top: 20px;">
+      <p style="color: #888;">Best Regards,<br>URMILA - Unified Resource Management Institute for Logistics and Analytics</p>
+    </footer>
+  </div>
+`;
+
+
+  
+const adminEmailContent = `
+  <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
+    <h2 style="color: #333;">New Course Registration Request</h2>
+    <p style="color: #555;">User Details:</p>
+    <ul style="list-style-type: none; padding-left: 0; color: #555;">
+      <li style="margin-bottom: 5px;"><strong>Name:</strong> ${name}</li>
+      <li style="margin-bottom: 5px;"><strong>Email:</strong> ${email}</li>
+      <li style="margin-bottom: 5px;"><strong>Phone:</strong> ${phone}</li>
+      <li style="margin-bottom: 5px;"><strong>Occupation:</strong> ${occupation}</li>
+      <li style="margin-bottom: 5px;"><strong>Institution:</strong> ${institution}</li>
+    </ul>
+    <p style="color: #555;">Course Interested: <strong style="color: #0056b3;">${title}</strong></p>
+    <footer style="margin-top: 20px;">
+      <p style="color: #888;">Best Regards,<br>Technical team</p>
+       <p style="color: #888;">URMILA - Unified Resource Management Institute for Logistics and Analytics</p>
+
+    </footer>
+  </div>
+`;
+
+  
+  try {
+      // Sending email to the user
+      await transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: email, // This is the user's email
+          subject: 'Course Registration Initiated',
+          html: userEmailContent,
+        });
+        
+      // Sending email to the admin
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_USER, // Your email
+        subject: 'New Course Registration Request',
+        html: adminEmailContent,
+      });
+      
+      res.status(200).send('Emails sent successfully');
+    } catch (error) {
+      console.error('Error sending emails:', error.message);
+      res.status(500).send('Error sending emails');
+    }
+});
 
 app.post('/refresh-token', (req, res) => {
   const refreshToken = req.cookies.refreshToken;

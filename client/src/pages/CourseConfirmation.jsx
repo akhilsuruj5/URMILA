@@ -28,7 +28,7 @@ export default function EnrollmentConfirmation() {
             <ul className="text-left text-gray-600 space-y-2">
               <li className="flex items-start">
                 <FaPhone className="text-green-500 mt-1 mr-2 flex-shrink-0" />
-                <span>Expect a call from our team within 24-48 hours.</span>
+                <span>Expect a call from our team within 24 hours.</span>
               </li>
               <li className="flex items-start">
                 <FaEnvelope className="text-green-500 mt-1 mr-2 flex-shrink-0" />

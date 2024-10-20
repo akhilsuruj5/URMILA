@@ -58,7 +58,7 @@ body {
 
 /* Custom scrollbar styles */
 .scrollable {
-  overflow-y: scroll; /* Enable vertical scrolling */
+  overflow-y: scroll; 
   height: 100vh; /* Set a height for scrolling */
 }
 

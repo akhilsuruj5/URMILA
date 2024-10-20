@@ -82,8 +82,9 @@ const Header = () => {
       <nav>
         <ul className='flex flex-row items-center space-x-12 pr-10 font-medium text-xl'>
           <li className='listitem'><Link to='/about'>About Us</Link></li>
+          {!isAuthenticated  &&
           <li className='listitem'><Link to='/ourofferings'>Our Offerings</Link></li>
-
+          }
           {isAuthenticated ? (
             <>
               <li className='listitem'><Link to='/mycourses'>My Courses</Link></li>

@@ -1,5 +1,5 @@
-import React from 'react'
-import { FaLinkedin, FaTwitter, FaFacebook, FaInstagram } from 'react-icons/fa'
+import { FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa'
+
 const AboutUs = () => {
   const companyName = "Unified Resource Management Institute for Logistics and Analytics (URMILA)";
   return (
@@ -7,7 +7,7 @@ const AboutUs = () => {
       <main className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-8 max-w-3xl mx-auto">{companyName}</h1>
 
-        <div className="bg-white rounded-lg max-w-6xl mx-auto pt-10 pb-10 overflow-hidden">
+        <div className="bg-white rounded-lg max-w-6xl mx-auto pt-10 pb-10 ">
           <div className="md:flex">
             {/* <div className="md:flex-shrink-0">
               <img

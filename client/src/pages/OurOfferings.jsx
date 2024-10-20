@@ -109,7 +109,9 @@ const OurOfferings = () => {
                   onClick={() => {
                     isAuthenticated 
                     ? 
-                    navigate('/enrollment-confirmed') 
+                    (
+                      navigate('/mycourses')
+                    ) 
                     : 
                     navigate('/login')}}
                 >

@@ -1,10 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LuMapPin } from "react-icons/lu";
 import { LuPhone } from "react-icons/lu";
 import { LuGlobe } from "react-icons/lu";
 import { LuMail } from "react-icons/lu";
 const Footer = () => {
+
+  const navigate = useNavigate();
   return (
 <footer className="bg-gray-900 text-white py-12">
         <div className=" mx-40">
@@ -19,10 +21,10 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
-                <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
-                <li><Link href="/ourofferings" className="text-gray-400 hover:text-white transition-colors">Our Offerings</Link></li>
-                <li><Link href="/contactus" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+                <li><button onClick={() => {navigate('/')}} className="text-gray-400 hover:text-white transition-colors">Home</button></li>
+                <li><button onClick={() => {navigate('/about')}} className="text-gray-400 hover:text-white transition-colors">About</button></li>
+                <li><button onClick={() => {navigate('/ourofferings')}} className="text-gray-400 hover:text-white transition-colors">Our Offerings</button></li>
+                <li><button onClick={() => {navigate('/contactus')}} className="text-gray-400 hover:text-white transition-colors">Contact Us</button></li>
               </ul>
             </div>
             <div>

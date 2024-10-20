@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, ScrollRestoration } from "react-router-dom";
 import Layout from "./components/Layout";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
@@ -11,10 +11,13 @@ import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import EnrollmentConfirmation from "./pages/CourseConfirmation";
 import ContactUs from "./pages/ContactUs";
+import ScrollToTop from "./ScrollToTop";
 
 function App() {
   return (
     <BrowserRouter>
+        <ScrollToTop />
+        {/* <ScrollRestoration /> */}
       <Routes>
         {/* Routes with Layout */}
         <Route element={<Layout />}>
