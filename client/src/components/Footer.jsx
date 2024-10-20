@@ -8,21 +8,21 @@ const Footer = () => {
   return (
 <footer className="bg-gray-900 text-white py-12">
         <div className=" mx-40">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
             <div>
               
-              <h3 className="text-lg font-semibold mb-4">About Us</h3>
+              <h3 className="text-lg font-semibold mb-4">Unified Resource Management Institute for Logistics and Analytics (URMILA) </h3>
               <p className="text-gray-400">
-                URMILA offers cutting-edge supply chain management courses to help professionals excel in their careers.
+                We offers cutting-edge supply chain management courses to help professionals excel in their careers.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><Link href="#" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
-                <li><Link href="#features" className="text-gray-400 hover:text-white transition-colors">Features</Link></li>
-                <li><Link href="#testimonials" className="text-gray-400 hover:text-white transition-colors">Testimonials</Link></li>
-                <li><Link href="#pricing" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
+                <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
+                <li><Link href="/ourofferings" className="text-gray-400 hover:text-white transition-colors">Our Offerings</Link></li>
+                <li><Link href="/contactus" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
               </ul>
             </div>
             <div>

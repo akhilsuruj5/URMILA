@@ -1,13 +1,13 @@
 import React from 'react';
 import { IoBookOutline } from "react-icons/io5";
-import { LuUsers } from "react-icons/lu";
-import { LuTrendingUp } from "react-icons/lu";
+import { LuUsers, LuTrendingUp } from "react-icons/lu";
+import { motion } from 'framer-motion'; // Import motion from framer-motion
+
 const WhyThisCourse = () => {
   const benefits = [
-    { title: "Mentorship", description: "Benefit from one-on-one guidance from industry professionals.", icon: <LuUsers  className="h-12 w-12 text-green-600 mb-4" /> },
-    { title: "Placement Assistance", description: "Get placement assistance to land a great job.", icon: <LuTrendingUp  className="h-12 w-12 text-green-600 mb-4" /> },
+    { title: "Mentorship", description: "Benefit from one-on-one guidance from industry professionals.", icon: <LuUsers className="h-12 w-12 text-green-600 mb-4" /> },
+    { title: "Placement Assistance", description: "Get placement assistance to land a great job.", icon: <LuTrendingUp className="h-12 w-12 text-green-600 mb-4" /> },
     { title: "Flexible Learning", description: "Learn at your own pace with flexible schedules.", icon: <IoBookOutline className="h-12 w-12 text-green-600 mb-4" /> },
-    // Add more benefits as needed
   ];
 
   return (
@@ -18,14 +18,18 @@ const WhyThisCourse = () => {
         </h2>
         <div className="grid pb-16 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit, index) => (
-            <div
+            <motion.div
               key={index}
               className="flex flex-col items-center text-center p-6 bg-green-50 rounded-lg shadow-lg transition-transform hover:scale-105"
+              initial={{ opacity: 0, y: 20 }} // Initial state for animation
+              whileInView={{ opacity: 1, y: 0 }} // State when in view
+              transition={{ duration: 0.5 }} // Duration of the animation
+              viewport={{ once: false, amount: 0.2 }} // Trigger when 20% of the component is visible
             >
               {benefit.icon}
               <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
               <p className="text-gray-700">{benefit.description}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

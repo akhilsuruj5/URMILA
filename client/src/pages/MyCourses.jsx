@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaSearch } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router';
 
 // Mock data for enrolled and all courses
 const enrolledCourses = [
-  {
-    id: 1,
-    title: "Certificate Course - Warehouse Solutions",
-    description:
-      "Learn efficient strategies for optimizing warehouse layout and operations.",
-    enrolled: true,
-    image: "/course1.png?height=100&width=200",
-  }
+
 ];
 
 const allCourses = [
@@ -20,7 +16,7 @@ const allCourses = [
     title: "Certificate Course - Warehouse Solutions",
     description:
       "Learn efficient strategies for optimizing warehouse layout and operations.",
-    enrolled: true,
+    enrolled: false,
     image: "/course1.png?height=100&width=200",
   },
   {
@@ -79,35 +75,60 @@ const MyCourses = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 const [searchTerm, setSearchTerm] = useState("");
-
-  
-  const [activeTab, setActiveTab] = useState("enrolled");
+const navigate = useNavigate()
+  const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem('token'); 
-
+      let token = localStorage.getItem('token');
+  
       if (!token) {
-        setError('No token found, please log in again.');
+        setError('User not found, please log in again.');
+        toast.error('User not found, please log in again.');
         return;
       }
-
+  
       try {
         const response = await axios.get('http://localhost:5000/user', {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         });
-        
+  
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);
-        setError('Error fetching user details');
+        if (error.response && error.response.status === 401) {
+          // Token might have expired, try refreshing it
+          try {
+            const refreshResponse = await axios.post('http://localhost:5000/refresh-token');
+            token = refreshResponse.data.accessToken;
+            localStorage.setItem('token', token);
+  
+            // Retry fetching user data
+            const retryResponse = await axios.get('http://localhost:5000/user', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+  
+            setUser(retryResponse.data);
+          } catch (refreshError) {
+            console.error('Error refreshing token:', refreshError);
+            setError('Session expired, please log in again.');
+            toast.error('Session expired, please log in again.');
+            localStorage.removeItem('token');
+          }
+        } else {
+          setError('Error fetching user details');
+          toast.error('Error fetching user details');
+        }
       }
     };
-
+  
     fetchUserData();
   }, []);
+  
 
   if (error) {
     return <div>{error}</div>;
@@ -123,6 +144,7 @@ const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 pb-20 pt-6 to-white">
+      <ToastContainer /> 
       <main className="container mx-auto px-4 py-8">
         <section className="mb-12">
           <h2 className="text-3xl font-bold mb-4">Welcome back, {user.name}!</h2>
@@ -195,6 +217,9 @@ const [searchTerm, setSearchTerm] = useState("");
                       ? "bg-green-100 text-green-600 border border-green-600"
                       : "bg-green-600 text-white"
                   }`}
+
+                  onClick={() => {
+                    navigate('/enrollment-confirmed') }}
                 >
                   {course.enrolled ? "Continue Learning" : "Enroll Now"}
                 </button>

@@ -61,20 +61,21 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(); 
-    navigate('/'); 
+    logout();
+    navigate('/');
   };
 
   useEffect(() => {
-  } , [isAuthenticated])
+  }, [isAuthenticated]);
+
   return (
     <div className='fixed top-0 left-0 w-full bg-white shadow-lg z-50 flex justify-between items-center p-5 pl-24 text-lg pt-3 pb-3'>
       <div>
         <Link to='/'>
-        <div className='flex flex-row items-center gap-4'>
+        <div className='flex flex-row items-center justify-center gap-4'>
 
-          <img src='/logo.jpeg' alt='Logo' className='h-[55px]' /> 
-          <span className='logo h-[55px] py-3 text-gray-900'>URMILA</span>
+          <img src='/logo.jpeg' alt='Logo' className='h-[50px]' /> 
+          <span className='text-4xl py-2 font-semibold h-[55px]  text-gray-800'>URMILA</span>
         </div>
         </Link>
       </div>

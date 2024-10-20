@@ -14,6 +14,9 @@ const Login = () => {
   const { isAuthenticated, login } = useAuth();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  useEffect(() => {
     if (isAuthenticated) {
       navigate("/mycourses");
     }

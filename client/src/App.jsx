@@ -9,23 +9,30 @@ import AboutUs from "./pages/AboutUs";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import EnrollmentConfirmation from "./pages/CourseConfirmation";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
+      <Routes>
+        {/* Routes with Layout */}
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
           <Route path="mycourses" element={<MyCourses />} />
+          <Route path="contactus" element={<ContactUs />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="ourofferings" element={<OurOfferings />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="forgot-password" element={<ForgotPassword/>} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password/:token" element={<ResetPassword />} />
-        </Routes>
-      </Layout>
+        </Route>
+
+        {/* Route without Layout */}
+        <Route path="enrollment-confirmed" element={<EnrollmentConfirmation />} />
+      </Routes>
     </BrowserRouter>
   );
 }

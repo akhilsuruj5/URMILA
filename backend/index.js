@@ -26,35 +26,46 @@ const authenticateToken = require("./middlewares/auth");
 
 const nodemailer = require("nodemailer");
 
+
 app.post("/register", async (req, res) => {
   try {
     const { name, email, password, phone, occupation, institution } = req.body;
-    
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ msg: "Email already exists" });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Check if a user with this email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser && existingUser.isVerified) {
+      return res.status(400).json({ msg: "Email already registered" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      phone,
-      occupation,
-      institution,
-      otp,
-      isVerified: false,
-    });
+    if (existingUser) {
+      // If user exists but is not verified, update OTP and other details
+      existingUser.password = hashedPassword;
+      existingUser.phone = phone;
+      existingUser.occupation = occupation;
+      existingUser.institution = institution;
+      existingUser.otp = otp;
+      existingUser.isVerified = false;
+      await existingUser.save();
+    } else {
+      // Create a new user if not already registered
+      const newUser = new User({
+        name,
+        email,
+        password: hashedPassword,
+        phone,
+        occupation,
+        institution,
+        otp,
+        isVerified: false,
+      });
 
-    try {
       await newUser.save();
-    } catch (error) {
-      console.error("Error saving user:", error);
-      return res.status(500).json({ msg: "Error saving user" });
     }
+
+    // Send OTP email
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -68,27 +79,91 @@ app.post("/register", async (req, res) => {
       to: email,
       subject: "Email Verification OTP",
       html: `
-  <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eaeaea; border-radius: 5px; background-color: #f9f9f9;">
-    <h2 style="color: #333;">Welcome!</h2>
-    <p style="color: #555;">Thank you for signing up. Please verify your email address to activate your account.</p>
-    <p style="color: #333; font-size: 20px; font-weight: bold;">Your OTP for email verification is:</p>
-    <h3 style="color: #007BFF; font-size: 24px; font-weight: bold;">${otp}</h3>
-    <p style="color: #555;">Enter this code in the verification page to complete your registration.</p>
-    <p style="color: #555;">If you did not request this, please ignore this email.</p>
-    <p style="color: #555;">Thank you,<br>URMILA</p>
-  </div>
-`,
+        <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eaeaea; border-radius: 5px; background-color: #f9f9f9;">
+          <h2 style="color: #333;">Welcome!</h2>
+          <p style="color: #555;">Thank you for signing up. Please verify your email address to activate your account.</p>
+          <p style="color: #333; font-size: 20px; font-weight: bold;">Your OTP for email verification is:</p>
+          <h3 style="color: #007BFF; font-size: 24px; font-weight: bold;">${otp}</h3>
+          <p style="color: #555;">Enter this code in the verification page to complete your registration.</p>
+          <p style="color: #555;">If you did not request this, please ignore this email.</p>
+          <p style="color: #555;">Thank you,<br>URMILA</p>
+        </div>
+      `,
     });
 
-    res
-      .status(201)
-      .json({
-        msg: "OTP sent to your email. Please check your email to verify.",
-      });
+    res.status(201).json({
+      msg: "OTP sent to your email. Please check your email to verify.",
+    });
   } catch (error) {
     res.status(500).json({ msg: "Error registering user" });
   }
 });
+
+
+
+// app.post("/register", async (req, res) => {
+//   try {
+//     const { name, email, password, phone, occupation, institution } = req.body;
+    
+//     const existingUser = await User.findOne({ email });
+//     if (existingUser) {
+//       return res.status(400).json({ msg: "Email already exists" });
+//     }
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+//     const newUser = new User({
+//       name,
+//       email,
+//       password: hashedPassword,
+//       phone,
+//       occupation,
+//       institution,
+//       otp,
+//       isVerified: false,
+//     });
+
+//     try {
+//       await newUser.save();
+//     } catch (error) {
+//       console.error("Error saving user:", error);
+//       return res.status(500).json({ msg: "Error saving user" });
+//     }
+//     const transporter = nodemailer.createTransport({
+//       service: "gmail",
+//       auth: {
+//         user: process.env.EMAIL_USER,
+//         pass: process.env.EMAIL_PASS,
+//       },
+//     });
+
+//     await transporter.sendMail({
+//       from: process.env.EMAIL_USER,
+//       to: email,
+//       subject: "Email Verification OTP",
+//       html: `
+//   <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eaeaea; border-radius: 5px; background-color: #f9f9f9;">
+//     <h2 style="color: #333;">Welcome!</h2>
+//     <p style="color: #555;">Thank you for signing up. Please verify your email address to activate your account.</p>
+//     <p style="color: #333; font-size: 20px; font-weight: bold;">Your OTP for email verification is:</p>
+//     <h3 style="color: #007BFF; font-size: 24px; font-weight: bold;">${otp}</h3>
+//     <p style="color: #555;">Enter this code in the verification page to complete your registration.</p>
+//     <p style="color: #555;">If you did not request this, please ignore this email.</p>
+//     <p style="color: #555;">Thank you,<br>URMILA</p>
+//   </div>
+// `,
+//     });
+
+//     res
+//       .status(201)
+//       .json({
+//         msg: "OTP sent to your email. Please check your email to verify.",
+//       });
+//   } catch (error) {
+//     res.status(500).json({ msg: "Error registering user" });
+//   }
+// });
 
 app.post("/complete-registration", authenticateToken, async (req, res) => {
   const { mobileNumber, currentOccupation, instituteOrOrganizationName } =
@@ -138,6 +213,7 @@ app.post("/verify-otp", async (req, res) => {
     // Check if the OTP matches
     if (user.otp === otp) {
       user.isVerified = true;
+      user.otp = null;
       await user.save();
 
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -301,6 +377,27 @@ app.get("/user", authenticateToken, async (req, res) => {
     res.status(500).json({ msg: "Error fetching user" });
   }
 });
+
+
+app.post('/refresh-token', (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ msg: 'Refresh token not found, please log in again' });
+  }
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ msg: 'Invalid refresh token' });
+
+    // Generate a new access token
+    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.json({ accessToken });
+  });
+});
+
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;

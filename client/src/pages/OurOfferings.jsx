@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import {useNavigate } from "react-router";
+import { useAuth } from "../Context/AuthContext";
 
 // Mock data for enrolled and all courses
 const enrolledCourses = [];
@@ -35,7 +37,7 @@ const allCourses = [
     description:
       "Gain insights into the processes and documentation essential for freight forwarding.",
     enrolled: false,
-    image: "/course3.png?height=100&width=200",
+    image: "/transport.jpg?height=100&width=200",
   },
   {
     id: 4,
@@ -43,45 +45,25 @@ const allCourses = [
     description:
       "Enhance your leadership skills in overseeing complex logistics and supply chain operations.",
     enrolled: false,
-    image: "/course4.png?height=100&width=200",
+    image: "/course3.png?height=100&width=200",
   },
 ];
 const OurOfferings = () => {
+
+  const {isAuthenticated} = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
-
+  const navigate = useNavigate();
   const filteredAllCourses = allCourses.filter((course) =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 pb-20 pt-6 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-white-50 pb-20 pt-6 to-white">
       <main className="container mx-auto px-4 py-8">
       
 
         <div className="mb-6">
-          {/* <div className="flex space-x-4 mb-6"> */}
-            {/* <button
-              className={`px-4 py-2 rounded-md ${
-                activeTab === "enrolled"
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-              onClick={() => setActiveTab("enrolled")}
-            >
-             Enrolled Courses
-            </button>
-            <button
-              className={`px-4 py-2 rounded-md ${
-                activeTab === "all"
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-              onClick={() => setActiveTab("all")}
-            >
-              All Courses
-            </button> */}
-          {/* </div> */}
           {activeTab === "all" && (
             <div className="relative">
               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -112,8 +94,8 @@ const OurOfferings = () => {
                 height={100}
                 className="w-full h-40 object-cover"
               />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold mb-2">{course.title}</h3>
+              <div className="p-4 flex flex-col justify-evenly">
+                <h3 className="text-xl font-semibold mb-2 line-clamp-3 h-16">{course.title}</h3>
                 <p className="text-gray-600 mb-4 h-12 overflow-hidden">
                   {course.description}
                 </p>
@@ -123,6 +105,13 @@ const OurOfferings = () => {
                       ? "bg-green-100 text-green-600 border border-green-600"
                       : "bg-green-600 text-white"
                   }`}
+
+                  onClick={() => {
+                    isAuthenticated 
+                    ? 
+                    navigate('/enrollment-confirmed') 
+                    : 
+                    navigate('/login')}}
                 >
                   {course.enrolled ? "Continue Learning" : "Enroll Now"}
                 </button>
