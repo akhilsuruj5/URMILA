@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../Context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'; // Import toastify styles
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -52,6 +53,18 @@ const Login = () => {
       toast.error(errorMessage);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-end h-screen pr-36">
@@ -104,17 +117,17 @@ const Login = () => {
               className="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring focus:ring-blue-500"
               disabled={loading} // Disable the button while loading
             >
-              {loading ? "Logging in..." : "Login"} {/* Show loader text */}
+              {loading ? "Logging in..." : "Login"}
             </button>
           </div>
-
+{/* 
           {loading && (
             <div className="text-center mt-4">
-              {/* Loader Spinner */}
               <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
               <p>Processing your login...</p>
             </div>
-          )}
+          )} */}
+
 
           <p className="text-center mt-4">
             New User?{" "}

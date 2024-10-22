@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { FaSearch } from "react-icons/fa";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router';
-import Loader from '../components/Loader';
-import { motion } from 'framer-motion';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router";
+import { motion } from "framer-motion";
 // Mock data for enrolled and all courses
-const enrolledCourses = [
-
-];
+const enrolledCourses = [];
 
 const allCourses = [
   {
@@ -72,83 +69,91 @@ const allCourses = [
 // };
 
 const MyCourses = () => {
-
   const [user, setUser] = useState(null);
-  const [error, setError] = useState('');
-const [searchTerm, setSearchTerm] = useState("");
-const navigate = useNavigate()
+  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
 
-
-  const [isLoading , setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchUserData = async () => {
-      let token = localStorage.getItem('token');
-      
+      let token = localStorage.getItem("token");
+
       if (!token) {
-        setError('User not found, please log in again.');
-        toast.error('User not found, please log in again.');
+        setError("User not found, please log in again.");
+        toast.error("User not found, please log in again.");
 
         return;
       }
-  
+
       try {
-        const response = await axios.get('http://localhost:5000/user', {
+        const response = await axios.get("http://localhost:5000/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         setUser(response.data);
-        
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
         if (error.response && error.response.status === 401) {
           // Token might have expired, try refreshing it
           try {
-            const refreshResponse = await axios.post('http://localhost:5000/refresh-token');
+            const refreshResponse = await axios.post(
+              "http://localhost:5000/refresh-token"
+            );
             token = refreshResponse.data.accessToken;
-            localStorage.setItem('token', token);
-  
+            localStorage.setItem("token", token);
+
             // Retry fetching user data
-            const retryResponse = await axios.get('http://localhost:5000/user', {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-  
+            const retryResponse = await axios.get(
+              "http://localhost:5000/user",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
             setUser(retryResponse.data);
           } catch (refreshError) {
-            console.error('Error refreshing token:', refreshError);
-            setError('Session expired, please log in again.');
-            toast.error('Session expired, please log in again.');
-            localStorage.removeItem('token');
+            console.error("Error refreshing token:", refreshError);
+            setError("Session expired, please log in again.");
+            toast.error("Session expired, please log in again.");
+            localStorage.removeItem("token");
           }
         } else {
-          setError('Error fetching user details');
-          toast.error('Error fetching user details');
+          setError("Error fetching user details");
+          toast.error("Error fetching user details");
         }
       }
     };
-  
+
     fetchUserData();
   }, []);
-  
 
   if (error) {
-    return <div className='text-center py-10 text-xl'>{error}</div>;
+    return <div className="text-center py-10 text-xl">{error}</div>;
   }
 
   if (!user) {
-    return <div className="pt-20"><Loader /></div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+        />
+      </div>
+    );
   }
 
   const filteredAllCourses = allCourses.filter((course) =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
-  const handleEnroll = async (courseId , title) => {
+  const handleEnroll = async (courseId, title) => {
     setIsLoading(true);
     const userData = {
       name: user._doc.name,
@@ -158,44 +163,59 @@ const navigate = useNavigate()
       institution: user._doc.institution,
       title: title,
     };
-    let token = localStorage.getItem('token');
-    
+    let token = localStorage.getItem("token");
+
     try {
-      const response = await axios.post('http://localhost:5000/send-email', {
-        userData
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        "http://localhost:5000/send-email",
+        {
+          userData,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
-        toast.success('Enrollment initiated! A confirmation email has been sent.');
+        toast.success(
+          "Enrollment initiated! A confirmation email has been sent."
+        );
       }
       setIsLoading(false);
-      navigate('/enrollment-confirmed');
+      navigate("/enrollment-confirmed");
     } catch (error) {
-      console.error('Error enrolling in course:', error);
-      toast.error('Failed to enroll. Please try again.');
+      console.error("Error enrolling in course:", error);
+      toast.error("Failed to enroll. Please try again.");
     }
   };
 
-  if(isLoading )
-    return <div className="pt-20">
-      <Loader />
-    </div>
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-gradient-to-b from-white pb-20 pt-6 to-white">
-      <ToastContainer /> 
+      <ToastContainer />
       <main className="container mx-auto px-4 py-8">
         <section className="mb-12">
-        <motion.h1
+          {/* <motion.h1
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1 }}
-    >
-          <h2 className="text-3xl font-bold mb-4">Welcome back, {user._doc.name} !</h2>
-      </motion.h1>
+    > */}
+          <h2 className="text-3xl font-bold mb-4">
+            Welcome back, {user._doc.name} !
+          </h2>
+          {/* </motion.h1> */}
           <p className="text-xl text-gray-600">
             Ready to continue your supply chain management journey?
           </p>
@@ -255,8 +275,10 @@ const navigate = useNavigate()
                 className="w-full h-40 object-cover"
               />
               <div className="p-4 flex flex-col justify-evenly">
-                <h3 className="text-xl font-semibold mb-2 line-clamp-3 h-16">{course.title}</h3>
-               <p className="text-gray-600 mb-4 h-12 overflow-hidden">
+                <h3 className="text-xl font-semibold mb-2 line-clamp-3 h-16">
+                  {course.title}
+                </h3>
+                <p className="text-gray-600 mb-4 h-12 overflow-hidden">
                   {course.description}
                 </p>
                 <button
@@ -265,10 +287,8 @@ const navigate = useNavigate()
                       ? "bg-green-100 text-green-600 border border-green-600"
                       : "bg-green-600 text-white"
                   }`}
-
                   onClick={() => {
-                      handleEnroll(course.id , course.title);
-                      
+                    handleEnroll(course.id, course.title);
                   }}
                 >
                   {course.enrolled ? "Continue Learning" : "Enroll Now"}
@@ -283,10 +303,6 @@ const navigate = useNavigate()
 };
 
 export default MyCourses;
-
-
-
-
 
 // import { useState } from 'react'
 // import { Button } from "@/components/ui/button"
