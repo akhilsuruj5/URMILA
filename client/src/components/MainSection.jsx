@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import {motion} from 'framer-motion';
 const MainSection = () => {
   return (
 <section 
@@ -11,10 +11,16 @@ const MainSection = () => {
 
       <div className="relative container mx-auto flex flex-col justify-center h-full text-center">
         <div className="mx-auto text-white">
+        <motion.h1
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 1 }}
+    >
           <h1 className="text-6xl font-bold mb-4 pb-10">Master Supply Chain Management</h1>
           <p className="text-xl mb-20 max-w-3xl mx-auto">
             Immerse yourself in a hands-on, project-based program designed to equip you with the skills needed to excel in the competitive supply chain management industry.
           </p>  
+     </ motion.h1>
           {/* <p className="text-md mb-12">Master the Fundamentals: Logistics, Operations, Planning, Sourcing, and Strategy</p> */}
           <Link to="/ourofferings" className="bg-green-600 text-white py-3 px-6 text-md rounded-md">Explore Courses</Link>
         </div>

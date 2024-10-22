@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router';
 import Loader from '../components/Loader';
-
+import { motion } from 'framer-motion';
 // Mock data for enrolled and all courses
 const enrolledCourses = [
 
@@ -189,7 +189,13 @@ const navigate = useNavigate()
       <ToastContainer /> 
       <main className="container mx-auto px-4 py-8">
         <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-4">Welcome back, {user.name}!</h2>
+        <motion.h1
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 1 }}
+    >
+          <h2 className="text-3xl font-bold mb-4">Welcome back, {user._doc.name} !</h2>
+      </motion.h1>
           <p className="text-xl text-gray-600">
             Ready to continue your supply chain management journey?
           </p>
