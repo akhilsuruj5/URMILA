@@ -21,20 +21,20 @@ const userSchema = new mongoose.Schema({
       /^[0-9]{10}$/,
       'Mobile number must be a valid 10-digit number',
     ],
-    required: true,  // Now optional for first step
+    required: true, 
   },
   occupation: {
     type: String,
     enum: ['Student', 'Professional'],
-    required: true,  // Now optional for first step
+    required: true, 
   },
   institution: {
     type: String,
-    required: true,  // Now optional for first step
+    required: true,  
   },
   password: {
     type: String,
-    required: true,  // Now optional for first step
+    required: true, 
   },
   isVerified: {
     type: Boolean,
