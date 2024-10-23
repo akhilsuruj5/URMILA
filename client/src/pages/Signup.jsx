@@ -94,7 +94,7 @@ const Signup = () => {
 
     if (isOtpSent) {
       try {
-        const response = await axios.post('http://localhost:5000/verify-otp', {
+        const response = await axios.post('https://urmila-backend.onrender.com/verify-otp', {
           email: formData.email,
           otp,
         });
@@ -107,7 +107,7 @@ const Signup = () => {
       }
     } else {
       try {
-        const response = await axios.post('http://localhost:5000/register', {
+        const response = await axios.post('https://urmila-backend.onrender.com/register', {
           name: formData.name,
           email: formData.email,
           password: formData.password,

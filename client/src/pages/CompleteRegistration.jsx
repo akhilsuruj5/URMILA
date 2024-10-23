@@ -53,7 +53,7 @@ const CompleteRegistration = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/complete-registration', formData, {
+      const response = await axios.post('https://urmila-backend.onrender.com/complete-registration', formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } // Include JWT token if you're using it
       });
       setSuccessMessage(response.data.msg);

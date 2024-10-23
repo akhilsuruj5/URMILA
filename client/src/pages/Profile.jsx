@@ -4,6 +4,7 @@ import { FiUser, FiMail, FiPhone, FiBriefcase, FiBook, FiLock, FiSave } from 're
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 // Simulated function to fetch user data from the database
 
 
@@ -18,7 +19,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true)
   
   const [error, setError] = useState('');
-
+  const navigate = useNavigate();
   const fetchUserData = async () => {
     let token = localStorage.getItem('token');
     
@@ -30,7 +31,7 @@ export default function Profile() {
     }
   
     try {
-      const response = await axios.get('http://localhost:5000/user', {
+      const response = await axios.get('https://urmila-backend.onrender.com/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,12 +44,12 @@ export default function Profile() {
       if (error.response && error.response.status === 401) {
         // Token might have expired, try refreshing it
         try {
-          const refreshResponse = await axios.post('http://localhost:5000/refresh-token');
+          const refreshResponse = await axios.post('https://urmila-backend.onrender.com/refresh-token');
           token = refreshResponse.data.accessToken;
           localStorage.setItem('token', token);
   
           // Retry fetching user data
-          const retryResponse = await axios.get('http://localhost:5000/user', {
+          const retryResponse = await axios.get('https://urmila-backend.onrender.com/user', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -73,7 +74,6 @@ export default function Profile() {
 
   useEffect(() => {
     fetchUserData().then((data) => {
-      console.log(data);
       setFormData(data)
       setIsLoading(false)
     })
@@ -87,13 +87,13 @@ export default function Profile() {
   const handleSubmit = (e) => {
     e.preventDefault()
     // Simulated API call to update user profile
-    console.log('Updating profile with:', formData)
     toast('Profile updated successfully!')
   }
 
   const handlePasswordReset = () => {
     // Simulated password reset functionality
-    console.log('Password reset requested')
+    navigate('/forgot-password')
+    // console.log('Password reset requested')
     toast('Password reset email sent. Check your inbox.')
   }
 

@@ -88,7 +88,7 @@ const MyCourses = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:5000/user", {
+        const response = await axios.get("https://urmila-backend.onrender.com/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -101,14 +101,14 @@ const MyCourses = () => {
           // Token might have expired, try refreshing it
           try {
             const refreshResponse = await axios.post(
-              "http://localhost:5000/refresh-token"
+              "https://urmila-backend.onrender.com/refresh-token"
             );
             token = refreshResponse.data.accessToken;
             localStorage.setItem("token", token);
 
             // Retry fetching user data
             const retryResponse = await axios.get(
-              "http://localhost:5000/user",
+              "https://urmila-backend.onrender.com/user",
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -167,7 +167,7 @@ const MyCourses = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/send-email",
+        "https://urmila-backend.onrender.com/send-email",
         {
           userData,
         },
