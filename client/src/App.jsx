@@ -22,9 +22,9 @@ function App() {
         {/* Routes with Layout */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
-          <Route path="signup" element={<Signup />} />
-          <Route path="login" element={<Login />} />
-          <Route path="mycourses" element={<MyCourses />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/mycourses" element={<MyCourses />} />
           <Route path="contactus" element={<ContactUs />} />
           <Route path="about" element={<AboutUs />} />
           <Route path="ourofferings" element={<OurOfferings />} />
