@@ -62,7 +62,9 @@ app.post("/register", async (req, res) => {
 
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: 'smtp.hostinger.com',
+      port: 465,
+      secure: true, // use SSL
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -176,7 +178,9 @@ app.post("/forgot-password", async (req, res) => {
     const resetURL = `http://localhost:5173/reset-password/${resetToken}`;
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: 'smtp.hostinger.com',
+      port: 465,
+      secure: true, // use SSL
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -320,7 +324,7 @@ app.post('/send-email', async (req, res) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.hostinger.com',
     port: 465,
-    secure: true, // use SSL
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -369,12 +373,15 @@ const adminEmailContent = `
 
   
   try {
-      await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: email,
-          subject: 'Course Registration Initiated',
-          html: userEmailContent,
-        });
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.hostinger.com',
+      port: 465,
+      secure: true, // use SSL
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
         
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
