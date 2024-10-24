@@ -309,8 +309,18 @@ app.get("/user", authenticateToken, async (req, res) => {
 app.post('/send-email', async (req, res) => {
   const { name, email, phone, occupation, institution, title } = req.body.userData;
 
+  // const transporter = nodemailer.createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     user: process.env.EMAIL_USER,
+  //     pass: process.env.EMAIL_PASS,
+  //   },
+  // });
+
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: 'smtp.hostinger.com',
+    port: 465,
+    secure: true, // use SSL
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
