@@ -67,9 +67,9 @@ const Login = () => {
   }
 
   return (
-    <div className="flex justify-end h-screen pr-36">
+    <div className="flex justify-center items-center h-screen px-4">
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} />
-      <div className="w-full max-w-md pt-28 rounded-lg p-6">
+      <div className="w-full max-w-md pt-8 rounded-lg p-6 bg-white shadow-md">
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
           Login
         </h2>
@@ -120,23 +120,15 @@ const Login = () => {
               {loading ? "Logging in..." : "Login"}
             </button>
           </div>
-{/* 
-          {loading && (
-            <div className="text-center mt-4">
-              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-              <p>Processing your login...</p>
-            </div>
-          )} */}
 
-
-          <p className="text-center mt-4">
+          <p className="text-center mt-4 text-sm">
             New User?{" "}
             <a href="/signup" className="text-blue-500 hover:underline">
               Signup
             </a>
           </p>
 
-          <p className="text-center mt-4">
+          <p className="text-center mt-4 text-sm">
             <a href="/forgot-password" className="text-blue-500 hover:underline">
               Forgot Password?
             </a>

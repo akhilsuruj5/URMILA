@@ -102,21 +102,21 @@ export default function ContactUs() {
                 <FiPhone className="mt-1 mr-3 text-blue-500" />
                 <div>
                   <h3 className="font-medium">Phone</h3>
-                  <p>+1 (123) 456-7890</p>
+                  <p>+91 83 6868 2912</p>
                 </div>
               </div>
               <div className="flex items-start">
                 <FiMail className="mt-1 mr-3 text-blue-500" />
                 <div>
                   <h3 className="font-medium">Email</h3>
-                  <p>contact@example.com</p>
+                  <p>support@urmila.academy</p>
                 </div>
               </div>
               <div className="flex items-start">
                 <FiMapPin className="mt-1 mr-3 text-blue-500" />
                 <div>
                   <h3 className="font-medium">Address</h3>
-                  <p>123 Education Street, Learning City, 12345, Country</p>
+                  <p>DLF Cybercity, Gurugram (HR) India</p>
                 </div>
               </div>
             </div>

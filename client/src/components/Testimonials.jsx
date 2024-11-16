@@ -1,54 +1,85 @@
-import React from 'react';
-import Slider from 'react-slick'; // Import Slider from react-slick
-import { FaLinkedin } from 'react-icons/fa';
-import 'slick-carousel/slick/slick.css'; // Import slick-carousel CSS
-import 'slick-carousel/slick/slick-theme.css';
+import React from "react";
+import Slider from "react-slick"; // Import Slider from react-slick
+import { FaLinkedin } from "react-icons/fa";
+import "slick-carousel/slick/slick.css"; // Import slick-carousel CSS
+import "slick-carousel/slick/slick-theme.css";
 
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "Aditya",
-      role: "Supply Chain Analyst",
-      text: "This bootcamp was invaluable for my career. The practical knowledge helped me excel.",
+      name: "",
+      role: "Mayuresh",
+      text: (
+        <>
+          I had the privilege of being mentored by Akhilesh Kushawaha under the
+          umbrella of{" "}
+          <a
+            href="https://www.linkedin.com/company/1urmila/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-500"
+          >
+            URMILA
+          </a>
+          , an expert in warehouse solutions, warehouse design, and automation
+          solutions, and the experience under his mentorship has been invaluable
+          for my career development. Akhilesh Kushawaha not only taught me the
+          technical basics but also demonstrated the strategic thinking required
+          to design and optimize efficient, future-ready warehouses.
+        </>
+      ),
       image: "testimonial.jpg",
-      linkedin: "https://www.linkedin.com/in/aditya/",
+      linkedin: "https://www.linkedin.com/in/mayuresh-jahagirdar-78368762/",
     },
     {
-      name: "Rahul",
-      role: "Logistics Manager",
-      text: "I'm so grateful for the placement assistance. I landed a great job!",
+      name: "",
+      role: "Sanjeev",
+      text: (
+        <>
+          I am incredibly grateful to have had the opportunity to learn from
+          Akhilesh Kushawaha under the umbrella of{" "}
+          <a
+            href="https://www.linkedin.com/company/1urmila/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-500"
+          >
+            URMILA
+          </a>{" "}
+          with such depth in warehouse operations and logistics solutions. His
+          guidance has been pivotal in developing my understanding of both the
+          fundamentals and practical aspects of these fields, and his teaching
+          style has left a lasting impact on my approach to logistics.
+        </>
+      ),
       image: "testimonial.jpg",
-      linkedin: "https://www.linkedin.com/in/rahul/",
+      linkedin: "https://www.linkedin.com/in/sanjeev-maurya-b73b517a/",
     },
     {
       name: "Nidhi",
-      role: "Operations Manager",
-      text: "The bootcamp gave me the confidence and skills to lead supply chain operations effectively.",
+      role: "Ankita",
+      text: (
+        <>
+          I am incredibly grateful for the mentorship I received from Akhilesh
+          Kushawaha under the umbrella of{" "}
+          <a
+            href="https://www.linkedin.com/company/1urmila/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-500"
+          >
+            URMILA
+          </a>
+          , who not only taught me the fundamentals of warehouse solution design
+          but also supported me in securing my first job in the field. Their
+          expertise and dedication have been instrumental in shaping my career
+          journey and providing me with the confidence and knowledge I needed to
+          succeed.{" "}
+        </>
+      ),
       image: "testimonial.jpg",
-      linkedin: "https://www.linkedin.com/in/nidhi/",
+      linkedin: "https://www.linkedin.com/in/ankita-kushwaha-349b55329/",
     },
-    {
-      name: "Unknown",
-      role: "Operations Manager",
-      text: "The bootcamp gave me the confidence and skills to lead supply chain operations effectively.",
-      image: "testimonial.jpg",
-      linkedin: "https://www.linkedin.com/in/nidhi/",
-    },
-    {
-      name: "Aayush",
-      role: "Operations Manager",
-      text: "The bootcamp gave me the confidence and skills to lead supply chain operations effectively.",
-      image: "testimonial.jpg",
-      linkedin: "https://www.linkedin.com/in/nidhi/",
-    },
-    {
-      name: "Tarun",
-      role: "Operations Manager",
-      text: "The bootcamp gave me the confidence and skills to lead supply chain operations effectively.",
-      image: "testimonial.jpg",
-      linkedin: "https://www.linkedin.com/in/nidhi/",
-    },
-    // Add more testimonials as needed
   ];
 
   // Slider settings for react-slick
@@ -63,7 +94,7 @@ const Testimonials = () => {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
         },
       },
       {
@@ -76,24 +107,29 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="testimonials" className="px-16 pb-32 py-16 bg-gradient-to-r from-green-400 via-green-600 to-green-600 text-white">
+    <section
+      id="testimonials"
+      className="px-16 pb-32 py-16 bg-gradient-to-r from-green-400 via-green-600 to-green-600 text-white"
+    >
       <div className="container mx-auto">
         <h2 className="text-white text-3xl pb-10 font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">
           Testimonials
         </h2>
-        <Slider {...settings} autoplay={true}
-  autoplaySpeed={2000}>
+        <Slider {...settings} autoplay={true} autoplaySpeed={2000}>
           {testimonials.map((testimonial, index) => (
             <div key={index} className="p-4">
               <div
-                className="flex flex-col items-center justify-between text-center bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 h-80" // Fixed height
+                className="flex flex-col items-center justify-between text-center bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 min-h-[300px]" // Adjust min-h value as needed
               >
-                <img
+                {/* <img
                   src={testimonial.image}
                   alt={testimonial.name}
                   className="w-24 h-24 rounded-full mb-4"
-                />
-                <p className="text-gray-700 mb-4 italic flex-grow">"{testimonial.text}"</p>
+                /> */}
+                <p className="text-gray-700 mb-2 italic max-h-40 overflow-auto">
+                  "{testimonial.text}"
+                </p>
+
                 <div>
                   <p className="font-bold">{testimonial.name}</p>
                   <p className="text-sm text-gray-600">{testimonial.role}</p>
@@ -102,7 +138,7 @@ const Testimonials = () => {
                   href={testimonial.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 mt-4 flex items-center justify-center"
+                  className="text-blue-600  flex items-center justify-center"
                 >
                   <FaLinkedin className="w-6 h-6 mr-2" />
                   <span className="underline">Connect on LinkedIn</span>

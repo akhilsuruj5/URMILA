@@ -31,13 +31,12 @@ const AboutUs = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Our Team</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {[
-              { name: 'Akhilesh Kushawaha', role: 'CEO' },
-              { name: 'Name', role: 'Head of Operations' },
-              { name: 'Name', role: 'Lead Data Scientist' },
-              { name: 'Name', role: 'Customer Success Manager' },
-              { name: 'Name', role: 'Senior Supply Chain Analyst' },
-              { name: 'Name', role: 'UX/UI Designer' },
-              { name: 'Name', role: 'Marketing Director' }
+              { name: 'Akhilesh Kushawaha', role: 'Mentor- SCM' },
+              { name: 'Shobhit Srivastava', role: 'Mentor- Communication' },
+              { name: 'Neeraj Gangwal', role: 'Mentor- 3D Modelling' },
+              { name: 'Komal Balyan', role: 'Mentor- Automation & Consulting' },
+              { name: 'Akhilesh Pratap Singh', role: 'Mentor- Product Management' },
+              { name: 'Heena Jaisawal', role: 'Mentor- Digital Marketing' },
             ].map((member, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md p-6">
                 <div className="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full">

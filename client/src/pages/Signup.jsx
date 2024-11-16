@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
@@ -16,7 +15,6 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({}); // State for handling errors
-
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -126,9 +124,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex justify-end pr-36 pt-20 min-h-screen ">
-      <div className="p-8 rounded-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-10 text-center text-gray-700">Sign up and start learning</h2>
+    <div className="flex justify-center items-center pr-6 pt-20 min-h-screen">
+      <div className="p-6 sm:p-8 w-full max-w-md bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">Sign up and start learning</h2>
 
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
         {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
@@ -137,7 +135,7 @@ const Signup = () => {
         {step === 1 && (
           <form onSubmit={handleNextStep} className="space-y-6">
             <div>
-              <label className=" text-gray-700 font-medium mb-1">Name <span className="text-red-500">*</span></label>
+              <label className="text-gray-700 font-medium mb-1">Name <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 name="name"
@@ -177,7 +175,7 @@ const Signup = () => {
               Next
             </button>
 
-            <p className="text-center mt-4">
+            <p className="text-center mt-4 text-sm">
               Already have an account?{" "}
               <a href="/login" className="text-blue-500 hover:underline">
                 Login
@@ -225,48 +223,18 @@ const Signup = () => {
 
             <button
               type="submit"
-              className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors"
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
             >
-              Submit
-            </button>
-
-            <button
-              type="button"
-              onClick={handlePreviousStep}
-              className="w-full bg-gray-400 text-white py-2 rounded-md hover:bg-gray-500 transition-colors mt-4"
-            >
-              Back
+              {isOtpSent ? 'Verify OTP' : 'Sign Up'}
             </button>
           </form>
         )}
       </div>
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-            <h3 className="text-xl font-bold mb-4 text-center">Enter OTP</h3>
-            <input
-              type="text"
-              value={otp}
-              onChange={handleOtpChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
-              placeholder="Enter OTP"
-            />
-            <button
-              onClick={handleSubmit}
-              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
-            >
-              Verify OTP
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
 export default Signup;
-
 
 
 

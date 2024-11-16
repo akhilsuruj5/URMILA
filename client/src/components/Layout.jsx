@@ -15,7 +15,7 @@ const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen scrollable">
       <Header />
-      <main className="grow mt-20">
+      <main className="grow mt-16">
         <Outlet />
       </main>
       <Footer />
