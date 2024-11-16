@@ -6,12 +6,11 @@ const AboutUs = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white-50 to-white pb-16 pt-6">
       <main className="container mx-auto px-4 py-8 sm:py-12">
-        {/* Company Name */}
+
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 max-w-3xl mx-auto">
           {companyName}
         </h1>
 
-        {/* About Section */}
         <div className="bg-white rounded-lg max-w-6xl mx-auto p-6 sm:p-8">
           <div className="md:flex">
             <div className="">
