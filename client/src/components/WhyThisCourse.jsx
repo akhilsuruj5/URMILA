@@ -31,6 +31,7 @@ const WhyThisCourse = () => {
       title: "Internship and Placement Support",
       description: "Providing skills and support for a seamless entry into the workforce.",
       icon: <LuTrendingUp className="h-12 w-12 text-green-600 mb-4" />,
+       action: () => navigate('/placementsupport'),
     },
   ];
 
