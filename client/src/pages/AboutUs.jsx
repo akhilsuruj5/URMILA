@@ -50,54 +50,51 @@ const AboutUs = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                <a
+                  href="https://www.linkedin.com/in/neerajgangwal2006/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-base sm:text-lg font-semibold text-gray-800 hover:underline"
+                >
                   Neeraj Gangwal
-                </h3>
+                </a>
                 <p className="text-sm text-gray-600">Organizer & Coordinator</p>
                 <p className="text-sm text-gray-600 leading-relaxed mt-2">
                   Neeraj Gangwal is an IIT Kanpur alumni who has more than 10
                   years of experience in building training and workshop
                   ecosystems and managing them.
                 </p>
-                <div className="mt-auto">
-                  <a
-                    href="https://www.linkedin.com/in/neerajgangwal2006/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 mt-2 hover:underline"
-                  >
-                    LinkedIn: Neeraj Gangwal
-                  </a>
-                </div>
               </div>
             </div>
 
             {/* Second Line Onwards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[{
-                name: "Akhilesh Kushawaha",
-                role: "Mentor- SCM",
-                description:
-                  "Akhilesh Kushawaha is an IIT Kanpur alumni who has around 10 years of experience in the supply chain domain and has a proven track record of student and early career professionals mentorship.",
-                linkedin: "https://www.linkedin.com/in/akhilesh-kushawaha-79b73980/",
-                image: '1728667575676.jfif'
-              },
-              {
-                name: "Shobhit Srivastava",
-                role: "Mentor- Communication",
-                description:
-                  "Shobhit Srivastava has more than 15 years of experience in the supply chain domain and has a proven track record in customer communication and business development.",
-                linkedin: "https://www.linkedin.com/in/shobhit-srivastava-67813655/",
-                image: '1533738524520.jfif'
-              },
-              {
-                name: "Heena Jaisawal",
-                role: "Mentor- Digital Marketing",
-                description:
-                  "Heena Jaisawal has more than 5 years of experience in the digital marketing domain and has a proven track record in digital marketing and strategy.",
-                linkedin: "",
-                image: 'testimonial.jpg'
-              }].map((member, index) => (
+              {[
+                {
+                  name: "Akhilesh Kushawaha",
+                  role: "Mentor- SCM",
+                  description:
+                    "Akhilesh Kushawaha is an IIT Kanpur alumni who has around 10 years of experience in the supply chain domain and has a proven track record of student and early career professionals mentorship.",
+                  linkedin: "https://www.linkedin.com/in/akhilesh-kushawaha-79b73980/",
+                  image: "1728667575676.jfif",
+                },
+                {
+                  name: "Shobhit Srivastava",
+                  role: "Mentor- Communication",
+                  description:
+                    "Shobhit Srivastava has more than 15 years of experience in the supply chain domain and has a proven track record in customer communication and business development.",
+                  linkedin: "https://www.linkedin.com/in/shobhit-srivastava-67813655/",
+                  image: "1533738524520.jfif",
+                },
+                {
+                  name: "Heena Jaisawal",
+                  role: "Mentor- Digital Marketing",
+                  description:
+                    "Heena Jaisawal has more than 5 years of experience in the digital marketing domain and has a proven track record in digital marketing and strategy.",
+                  linkedin: "",
+                  image: "testimonial.jpg",
+                },
+              ].map((member, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center"
@@ -109,25 +106,24 @@ const AboutUs = () => {
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">
-                    {member.name}
-                  </h3>
+                  {member.linkedin ? (
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-base sm:text-lg font-semibold text-gray-800 hover:underline"
+                    >
+                      {member.name}
+                    </a>
+                  ) : (
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                      {member.name}
+                    </h3>
+                  )}
                   <p className="text-sm text-gray-600">{member.role}</p>
                   <p className="text-sm text-gray-600 leading-relaxed mt-2">
                     {member.description}
                   </p>
-                  <div className="mt-auto">
-                    {member.linkedin && (
-                      <a
-                        href={member.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 mt-2 hover:underline"
-                      >
-                        LinkedIn: {member.name}
-                      </a>
-                    )}
-                  </div>
                 </div>
               ))}
             </div>
