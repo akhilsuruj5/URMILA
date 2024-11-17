@@ -7,8 +7,8 @@ import "slick-carousel/slick/slick-theme.css";
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "",
-      role: "Mayuresh",
+      name: "Mayuresh",
+      role: "",
       text: (
         <>
           I had the privilege of being mentored by Akhilesh Kushawaha under the
@@ -28,12 +28,12 @@ const Testimonials = () => {
           to design and optimize efficient, future-ready warehouses.
         </>
       ),
-      image: "testimonial.jpg",
+      image: "1679827921534.jfif",
       linkedin: "https://www.linkedin.com/in/mayuresh-jahagirdar-78368762/",
     },
     {
-      name: "",
-      role: "Sanjeev",
+      name: "Sanjeev",
+      role: "",
       text: (
         <>
           I am incredibly grateful to have had the opportunity to learn from
@@ -52,12 +52,12 @@ const Testimonials = () => {
           style has left a lasting impact on my approach to logistics.
         </>
       ),
-      image: "testimonial.jpg",
+      image: "1692017549395.jfif",
       linkedin: "https://www.linkedin.com/in/sanjeev-maurya-b73b517a/",
     },
     {
-      name: "Nidhi",
-      role: "Ankita",
+      name: "Ankita",
+      role: "",
       text: (
         <>
           I am incredibly grateful for the mentorship I received from Akhilesh
@@ -83,73 +83,77 @@ const Testimonials = () => {
   ];
 
   // Slider settings for react-slick
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 1,
-        },
+ // Slider settings for react-slick
+ const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  arrows: true,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 1,
       },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-        },
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 1,
       },
-    ],
-  };
+    },
+  ],
+};
 
-  return (
-    <section
-      id="testimonials"
-      className="px-16 pb-32 py-16 bg-gradient-to-r from-green-400 via-green-600 to-green-600 text-white"
-    >
-      <div className="container mx-auto">
-        <h2 className="text-white text-3xl pb-10 font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">
-          Testimonials
-        </h2>
-        <Slider {...settings} autoplay={true} autoplaySpeed={2000}>
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="p-4">
-              <div
-                className="flex flex-col items-center justify-between text-center bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 min-h-[300px]" // Adjust min-h value as needed
+return  (
+  <section
+    id="testimonials"
+    className="px-16 pb-32 py-16 bg-gradient-to-r from-green-400 via-green-600 to-green-600 text-white"
+  >
+    <div className="container mx-auto">
+      <h2 className="text-white text-3xl pb-10 font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">
+        Testimonials
+      </h2>
+      <Slider {...settings}>
+        {testimonials.map((testimonial, index) => (
+          <div key={index} className="p-4">
+            <div
+              className="flex flex-col items-center justify-between text-center bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 min-h-[350px] max-h-[350px] flex-grow"
+            >
+              <img
+                src={testimonial.image}
+                alt={testimonial.name}
+                className="w-24 h-24 rounded-full mb-4"
+              />
+              <p
+                className="text-gray-700 italic mb-4 max-h-[120px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
               >
-                {/* <img
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  className="w-24 h-24 rounded-full mb-4"
-                /> */}
-                <p className="text-gray-700 mb-2 italic max-h-40 overflow-auto">
-                  "{testimonial.text}"
-                </p>
-
-                <div>
-                  <p className="font-bold">{testimonial.name}</p>
-                  <p className="text-sm text-gray-600">{testimonial.role}</p>
-                </div>
+                {testimonial.text}
+              </p>
+              <div className="mt-auto">
+                <p className="font-bold text-gray-800">{testimonial.name}</p>
+                <p className="text-sm text-gray-600 mb-2">{testimonial.role}</p>
                 <a
                   href={testimonial.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600  flex items-center justify-center"
+                  className="text-blue-600 flex items-center justify-center"
                 >
                   <FaLinkedin className="w-6 h-6 mr-2" />
                   <span className="underline">Connect on LinkedIn</span>
                 </a>
               </div>
             </div>
-          ))}
-        </Slider>
-      </div>
-    </section>
-  );
+          </div>
+        ))}
+      </Slider>
+    </div>
+  </section>
+);
 };
 
 export default Testimonials;
