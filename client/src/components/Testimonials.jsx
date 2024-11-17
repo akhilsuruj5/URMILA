@@ -129,11 +129,12 @@ return  (
                 alt={testimonial.name}
                 className="w-24 h-24 rounded-full mb-4"
               />
+              
               <p
-                className="text-gray-700 italic mb-4 max-h-[120px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
-              >
-                {testimonial.text}
-              </p>
+  className="text-gray-700 italic mb-4 max-h-[120px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500 scrollbar-track-gray-200"
+>
+  {testimonial.text}
+</p>
               <div className="mt-auto">
                 <p className="font-bold text-gray-800">{testimonial.name}</p>
                 <p className="text-sm text-gray-600 mb-2">{testimonial.role}</p>
