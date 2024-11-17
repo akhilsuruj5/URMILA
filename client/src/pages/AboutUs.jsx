@@ -45,7 +45,7 @@ const AboutUs = () => {
               <div className="bg-white rounded-lg shadow-md p-6 max-w-sm flex flex-col items-center text-center">
                 <div className="w-24 h-24 mb-4 overflow-hidden rounded-full">
                   <img
-                    src={`/testimonial.jpg?height=96&width=96`}
+                    src={`/1516779222384.jfif?height=96&width=96`}
                     alt="Neeraj Gangwal Image"
                     className="w-full h-full object-cover"
                   />
@@ -80,6 +80,7 @@ const AboutUs = () => {
                 description:
                   "Akhilesh Kushawaha is an IIT Kanpur alumni who has around 10 years of experience in the supply chain domain and has a proven track record of student and early career professionals mentorship.",
                 linkedin: "https://www.linkedin.com/in/akhilesh-kushawaha-79b73980/",
+                image: '1728667575676.jfif'
               },
               {
                 name: "Shobhit Srivastava",
@@ -87,6 +88,7 @@ const AboutUs = () => {
                 description:
                   "Shobhit Srivastava has more than 15 years of experience in the supply chain domain and has a proven track record in customer communication and business development.",
                 linkedin: "https://www.linkedin.com/in/shobhit-srivastava-67813655/",
+                image: '1533738524520.jfif'
               },
               {
                 name: "Heena Jaisawal",
@@ -94,6 +96,7 @@ const AboutUs = () => {
                 description:
                   "Heena Jaisawal has more than 5 years of experience in the digital marketing domain and has a proven track record in digital marketing and strategy.",
                 linkedin: "",
+                image: 'testimonial.jpg'
               }].map((member, index) => (
                 <div
                   key={index}
@@ -101,7 +104,7 @@ const AboutUs = () => {
                 >
                   <div className="w-24 h-24 mb-4 overflow-hidden rounded-full">
                     <img
-                      src={`/testimonial.jpg?height=96&width=96`}
+                      src={`/${member.image}?height=96&width=96`}
                       alt={`${member.name} Image`}
                       className="w-full h-full object-cover"
                     />
