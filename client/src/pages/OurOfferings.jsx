@@ -91,7 +91,7 @@ const OurOfferings = () => {
 <h3 className="text-lg font-semibold line-clamp-2">
   {course.title}
 </h3>
-<p className="text-gray-700 text-sm leading-6 line-clamp-6">
+<p className="text-gray-700 text-sm leading-6 line-clamp-6 text-justify">
 {course.description}
 </p>
                 <button
