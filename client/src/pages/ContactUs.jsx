@@ -120,12 +120,12 @@ export default function ContactUs() {
                 </div>
               </div>
             </div>
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-2">Office Hours</h3>
+            {/* <div className="mt-8"> */}
+              {/* <h3 className="text-lg font-semibold mb-2">Office Hours</h3>
               <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
               <p>Saturday: 10:00 AM - 2:00 PM</p>
-              <p>Sunday: Closed</p>
-            </div>
+              <p>Sunday: Closed</p> */}
+            {/* </div> */}
           </div>
         </div>
       </motion.div>

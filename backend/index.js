@@ -64,7 +64,7 @@ app.post("/register", async (req, res) => {
     const transporter = nodemailer.createTransport({
       host: 'smtp.hostinger.com',
       port: 465,
-      secure: true, // use SSL
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -180,7 +180,7 @@ app.post("/forgot-password", async (req, res) => {
     const transporter = nodemailer.createTransport({
       host: 'smtp.hostinger.com',
       port: 465,
-      secure: true, // use SSL
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -321,6 +321,7 @@ app.post('/send-email', async (req, res) => {
   //   },
   // });
 
+  console.log('hello1');
   const transporter = nodemailer.createTransport({
     host: 'smtp.hostinger.com',
     port: 465,
@@ -330,27 +331,25 @@ app.post('/send-email', async (req, res) => {
       pass: process.env.EMAIL_PASS,
     },
   });
-
+  
+  console.log('hello1');
   const userEmailContent = `
   <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
-    <h2 style="color: #333;">Hi ${name},</h2>
-    <p style="color: #555;">
-      You have initiated course registration for <strong style="color: #0056b3;">${title}</strong>.
-    </p>
-    <p style="color: #555;">
-      Thank you for your interest! We will process your request shortly.
-    </p>
-    <p style="color: #555;">
-      You will receive a call from us within the next 24 hours to assist you further.
-    </p>
-    <footer style="margin-top: 20px;">
+  <h2 style="color: #333;">Hi ${name},</h2>
+  <p style="color: #555;">
+  You have initiated course registration for <strong style="color: #0056b3;">${title}</strong>.
+  </p>
+  <p style="color: #555;">
+  Thank you for your interest! We will process your request shortly.
+  </p>
+  <p style="color: #555;">
+  You will receive a call from us within the next 24 hours to assist you further.
+  </p>
+  <footer style="margin-top: 20px;">
       <p style="color: #888;">Best Regards,<br>URMILA - Unified Resource Management Institute for Logistics and Analytics</p>
     </footer>
   </div>
 `;
-
-
-  
 const adminEmailContent = `
   <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
     <h2 style="color: #333;">New Course Registration Request</h2>
@@ -368,31 +367,34 @@ const adminEmailContent = `
        <p style="color: #888;">URMILA - Unified Resource Management Institute for Logistics and Analytics</p>
 
     </footer>
-  </div>
-`;
+    </div>
+    `;
 
-  
-  try {
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.hostinger.com',
-      port: 465,
-      secure: true, // use SSL
+    
+    console.log('hello2');
+    try {
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.hostinger.com',
+        port: 465,
+        secure: true, // use SSL
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
-        
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER,
-        subject: 'New Course Registration Request',
-        html: adminEmailContent,
-      });
-      
+    console.log('hello3');
+    
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: 'New Course Registration Request',
+      html: adminEmailContent,
+    });
+    
+    console.log('hello4');
       res.status(200).send('Emails sent successfully');
     } catch (error) {
-      console.error('Error sending emails:', error.message);
+      console.error('Error sending emails:', error);
       res.status(500).send('Error sending emails');
     }
 });
