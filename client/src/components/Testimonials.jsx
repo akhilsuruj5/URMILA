@@ -1,160 +1,79 @@
-import React from "react";
-import Slider from "react-slick"; // Import Slider from react-slick
-import { FaLinkedin } from "react-icons/fa";
-import "slick-carousel/slick/slick.css"; // Import slick-carousel CSS
-import "slick-carousel/slick/slick-theme.css";
+import React from 'react';
+import { IoBookOutline } from "react-icons/io5";
+import { LuUsers, LuTrendingUp } from "react-icons/lu";
+import { FaUserTie, FaChalkboardTeacher } from "react-icons/fa";
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
-const Testimonials = () => {
-  const testimonials = [
+const WhyThisCourse = () => {
+  const navigate = useNavigate();
+
+  const benefits = [
     {
-      name: "Mayuresh",
-      role: "",
-      text: (
-        <>
-          I had the privilege of being mentored by Akhilesh Kushawaha under the
-          umbrella of{" "}
-          <a
-            href="https://www.linkedin.com/company/1urmila/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline text-blue-500"
-          >
-            URMILA
-          </a>
-          , an expert in warehouse solutions, warehouse design, and automation
-          solutions, and the experience under his mentorship has been invaluable
-          for my career development. Akhilesh Kushawaha not only taught me the
-          technical basics but also demonstrated the strategic thinking required
-          to design and optimize efficient, future-ready warehouses.
-        </>
-      ),
-      image: "1679827921534.jfif",
-      linkedin: "https://www.linkedin.com/in/mayuresh-jahagirdar-78368762/",
+      title: "1 to 1 Mentorship",
+      description: "Personalized mentorship to help you thrive and achieve your career goals.",
+      icon: <FaUserTie className="h-12 w-12 text-green-600 mb-4" />,
+      action: () => navigate('/one-on-one-mentorship'),
     },
     {
-      name: "Sanjeev",
-      role: "",
-      text: (
-        <>
-          I am incredibly grateful to have had the opportunity to learn from
-          Akhilesh Kushawaha under the umbrella of{" "}
-          <a
-            href="https://www.linkedin.com/company/1urmila/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline text-blue-500"
-          >
-            URMILA
-          </a>{" "}
-          with such depth in warehouse operations and logistics solutions. His
-          guidance has been pivotal in developing my understanding of both the
-          fundamentals and practical aspects of these fields, and his teaching
-          style has left a lasting impact on my approach to logistics.
-        </>
-      ),
-      image: "1692017549395.jfif",
-      linkedin: "https://www.linkedin.com/in/sanjeev-maurya-b73b517a/",
+      title: "Assignment Based Mentorship",
+      description: "Hands-on learning through real-world assignments for deeper understanding.",
+      icon: <FaChalkboardTeacher className="h-12 w-12 text-green-600 mb-4" />,
+      action: () => navigate('/mentorship'),
     },
     {
-      name: "Ankita",
-      role: "",
-      text: (
-        <>
-          I am incredibly grateful for the mentorship I received from Akhilesh
-          Kushawaha under the umbrella of{" "}
-          <a
-            href="https://www.linkedin.com/company/1urmila/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline text-blue-500"
-          >
-            URMILA
-          </a>
-          , who not only taught me the fundamentals of warehouse solution design
-          but also supported me in securing my first job in the field. Their
-          expertise and dedication have been instrumental in shaping my career
-          journey and providing me with the confidence and knowledge I needed to
-          succeed.{" "}
-        </>
-      ),
-      image: "testimonial.jpg",
-      linkedin: "https://www.linkedin.com/in/ankita-kushwaha-349b55329/",
+      title: "Our Courses",
+      description: "Certificate courses to bridge academic learning and industry needs.",
+      icon: <IoBookOutline className="h-12 w-12 text-green-600 mb-4" />,
+      action: () => navigate('/ourofferings'),
+    },
+    {
+      title: "Internship and Placement Support",
+      description: "Providing skills and support for a seamless entry into the workforce.",
+      icon: <LuTrendingUp className="h-12 w-12 text-green-600 mb-4" />,
+      action: () => navigate('/placementsupport'),
     },
   ];
 
-  // Slider settings for react-slick
- // Slider settings for react-slick
- const settings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  arrows: true,
-  autoplay: true,
-  autoplaySpeed: 2000,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 1,
-      },
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 1,
-      },
-    },
-  ],
-};
-
-return  (
-  <section
-    id="testimonials"
-    className="px-16 pb-32 py-16 bg-gradient-to-r from-green-400 via-green-600 to-green-600 text-white"
-  >
-    <div className="container mx-auto">
-      <h2 className="text-white text-3xl pb-10 font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">
-        Testimonials
-      </h2>
-      <Slider {...settings}>
-        {testimonials.map((testimonial, index) => (
-          <div key={index} className="p-4">
-            <div
-              className="flex flex-col items-center justify-between text-center bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 min-h-[350px] max-h-[350px] flex-grow"
+  return (
+    <section className="py-32 mx-6 sm:mx-12 md:mx-24 lg:mx-40">
+      <div className="container px-4">
+        <h2 className="text-3xl font-bold pb-12 tracking-tighter sm:text-4xl md:text-5xl text-center mb-8 text-green-600">
+          Our Offerings
+        </h2>
+        <div className="grid pb-16 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+          {benefits.map((benefit, index) => (
+            <motion.div
+              key={index}
+              className="relative flex flex-col items-center text-center p-6 bg-green-50 rounded-lg shadow-lg transition-transform hover:scale-105 cursor-pointer group"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: false, amount: 0.2 }}
+              onClick={benefit.action}
             >
-              <img
-                src={testimonial.image}
-                alt={testimonial.name}
-                className="w-24 h-24 rounded-full mb-4"
-              />
-              
-              <p
-  className="text-gray-700 italic mb-4 max-h-[120px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 hover:scrollbar-thumb-gray-500 scrollbar-track-gray-200"
->
-  {testimonial.text}
-</p>
-              <div className="mt-auto">
-                <p className="font-bold text-gray-800">{testimonial.name}</p>
-                <p className="text-sm text-gray-600 mb-2">{testimonial.role}</p>
-                <a
-                  href={testimonial.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 flex items-center justify-center"
+              {benefit.icon}
+              <h3 className="text-xl font-bold mb-2">{benefit.title}</h3>
+              <p className="text-gray-700 mb-4">{benefit.description}</p>
+
+              {/* Explore Button - Hidden initially, appears on hover */}
+              <div className="absolute inset-0 flex items-center justify-center bg-green-600 bg-opacity-60 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    benefit.action();
+                  }}
+                  className="px-6 py-2 bg-white text-green-600 rounded-md font-semibold"
                 >
-                  <FaLinkedin className="w-6 h-6 mr-2" />
-                  <span className="underline">Connect on LinkedIn</span>
-                </a>
+                  Explore
+                </button>
               </div>
-            </div>
-          </div>
-        ))}
-      </Slider>
-    </div>
-  </section>
-);
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 };
 
-export default Testimonials;
+export default WhyThisCourse;
