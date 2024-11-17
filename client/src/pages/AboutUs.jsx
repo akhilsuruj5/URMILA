@@ -1,4 +1,5 @@
-import { FaLinkedin, FaTwitter, FaInstagram } from "react-icons/fa";
+import { FaLinkedin, FaInstagram } from "react-icons/fa";
+import { TbBrandX } from "react-icons/tb";
 
 const AboutUs = () => {
   const companyName =
@@ -6,18 +7,19 @@ const AboutUs = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white-50 to-white pb-16 pt-6">
       <main className="container mx-auto px-4 py-8 sm:py-12">
-
+        {/* Company Name */}
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 max-w-3xl mx-auto">
           {companyName}
         </h1>
 
+        {/* About Us Section */}
         <div className="bg-white rounded-lg max-w-6xl mx-auto p-6 sm:p-8">
           <div className="md:flex">
-            <div className="">
+            <div className="w-full">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">
                 About Our Company
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed text-justify">
                 In 2018, we started bridging the gap between Academia and
                 Logistics Industry expectations in terms of talent quality after
                 realizing talent gaps. We started grooming fresh college
@@ -37,36 +39,99 @@ const AboutUs = () => {
           <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">
             Our Team
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {[
-              { name: "Akhilesh Kushawaha", role: "Mentor- SCM" },
-              { name: "Shobhit Srivastava", role: "Mentor- Communication" },
-              { name: "Neeraj Gangwal", role: "Mentor- 3D Modelling" },
-              { name: "Komal Balyan", role: "Mentor- Automation & Consulting" },
-              { name: "Akhilesh Pratap Singh", role: "Mentor- Product Management" },
-              { name: "Heena Jaisawal", role: "Mentor- Digital Marketing" },
-            ].map((member, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center"
-              >
+          <div className="space-y-8">
+            {/* First Line - Centered */}
+            <div className="flex justify-center">
+              <div className="bg-white rounded-lg shadow-md p-6 max-w-sm flex flex-col items-center text-center">
                 <div className="w-24 h-24 mb-4 overflow-hidden rounded-full">
                   <img
                     src={`/testimonial.jpg?height=96&width=96`}
-                    alt={`${member.name} Image`}
+                    alt="Neeraj Gangwal Image"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <h3 className="text-base sm:text-lg font-semibold text-gray-800">
-                  {member.name}
+                  Neeraj Gangwal
                 </h3>
-                <p className="text-sm text-gray-600">{member.role}</p>
+                <p className="text-sm text-gray-600">Organizer & Coordinator</p>
+                <p className="text-sm text-gray-600 leading-relaxed mt-2">
+                  Neeraj Gangwal is an IIT Kanpur alumni who has more than 10
+                  years of experience in building training and workshop
+                  ecosystems and managing them.
+                </p>
+                <div className="mt-auto">
+                  <a
+                    href="https://www.linkedin.com/in/neerajgangwal2006/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 mt-2 hover:underline"
+                  >
+                    LinkedIn: Neeraj Gangwal
+                  </a>
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Second Line Onwards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[{
+                name: "Akhilesh Kushawaha",
+                role: "Mentor- SCM",
+                description:
+                  "Akhilesh Kushawaha is an IIT Kanpur alumni who has around 10 years of experience in the supply chain domain and has a proven track record of student and early career professionals mentorship.",
+                linkedin: "https://www.linkedin.com/in/akhilesh-kushawaha-79b73980/",
+              },
+              {
+                name: "Shobhit Srivastava",
+                role: "Mentor- Communication",
+                description:
+                  "Shobhit Srivastava has more than 15 years of experience in the supply chain domain and has a proven track record in customer communication and business development.",
+                linkedin: "https://www.linkedin.com/in/shobhit-srivastava-67813655/",
+              },
+              {
+                name: "Heena Jaisawal",
+                role: "Mentor- Digital Marketing",
+                description:
+                  "Heena Jaisawal has more than 5 years of experience in the digital marketing domain and has a proven track record in digital marketing and strategy.",
+                linkedin: "",
+              }].map((member, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center"
+                >
+                  <div className="w-24 h-24 mb-4 overflow-hidden rounded-full">
+                    <img
+                      src={`/testimonial.jpg?height=96&width=96`}
+                      alt={`${member.name} Image`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800">
+                    {member.name}
+                  </h3>
+                  <p className="text-sm text-gray-600">{member.role}</p>
+                  <p className="text-sm text-gray-600 leading-relaxed mt-2">
+                    {member.description}
+                  </p>
+                  <div className="mt-auto">
+                    {member.linkedin && (
+                      <a
+                        href={member.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 mt-2 hover:underline"
+                      >
+                        LinkedIn: {member.name}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Connect With Us */}
+        {/* Connect with us */}
         <div className="mt-12 text-center">
           <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6">
             Connect With Us
@@ -76,21 +141,21 @@ const AboutUs = () => {
               href="https://www.linkedin.com/company/1urmila"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-600 hover:text-blue-500 transition-colors"
+              className="text-blue-500 transition-colors"
             >
               <FaLinkedin size={24} />
             </a>
             <a
               href="#"
-              className="text-gray-600 hover:text-pink-500 transition-colors"
+              className="text-pink-500 transition-colors"
             >
               <FaInstagram size={24} />
             </a>
             <a
               href="#"
-              className="text-gray-600 hover:text-blue-400 transition-colors"
+              className="text-gray-800 transition-colors"
             >
-              <FaTwitter size={24} />
+              <TbBrandX size={24} />
             </a>
           </div>
         </div>
