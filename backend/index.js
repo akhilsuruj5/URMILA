@@ -175,7 +175,7 @@ app.post("/forgot-password", async (req, res) => {
 
     await user.save();
 
-    const resetURL = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetURL = `http://urmila.academy/reset-password/${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.hostinger.com',
