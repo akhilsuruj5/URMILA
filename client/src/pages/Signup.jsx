@@ -1,26 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router';
-import { useAuth } from '../Context/AuthContext';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router";
+import { useAuth } from "../Context/AuthContext";
 
 const Signup = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    phone: '',
-    institution: '',
-    occupation: 'Student',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    institution: "",
+    occupation: "Student",
   });
 
   const [errors, setErrors] = useState({}); // State for handling errors
+
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/mycourses'); // Redirect to My Courses page
+      navigate("/mycourses"); // Redirect to My Courses page
     }
   }, [isAuthenticated, navigate]);
 
@@ -29,38 +32,68 @@ const Signup = () => {
     return phoneRegex.test(phone);
   };
 
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [step, setStep] = useState(1); // New state to track the current step
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: '' }); // Reset the error on input change
+    setErrors({ ...errors, [e.target.name]: "" }); // Reset the error on input change
   };
 
   const handleOtpChange = (e) => {
     setOtp(e.target.value);
   };
+  const handleOtpInput = (e, index) => {
+    const value = e.target.value;
+    if (value.length === 1 && /^\d$/.test(value)) {
+      // Update OTP state
+      const updatedOtp = otp.split("");
+      updatedOtp[index] = value;
+      setOtp(updatedOtp.join(""));
+
+      // Focus on the next input
+      if (index < 5) {
+        const nextInput = document.getElementById(`otp-input-${index + 1}`);
+        if (nextInput) nextInput.focus();
+      }
+    }
+  };
+
+  const handleBackspace = (e, index) => {
+    if (e.key === "Backspace" && !e.target.value) {
+      const updatedOtp = otp.split("");
+      updatedOtp[index] = ""; // Clear the current digit
+      setOtp(updatedOtp.join(""));
+
+      // Move focus to the previous input
+      if (index > 0) {
+        const prevInput = document.getElementById(`otp-input-${index - 1}`);
+        if (prevInput) prevInput.focus();
+      }
+    }
+  };
 
   const validateStep1 = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
-    if (!formData.password) newErrors.password = 'Password is required';
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
     return newErrors;
   };
 
   const validateStep2 = () => {
     const newErrors = {};
     if (!formData.phone) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = "Phone number is required";
     } else if (!validatePhoneNumber(formData.phone)) {
-      newErrors.phone = 'Please enter a valid 10-digit phone number';
+      newErrors.phone = "Please enter a valid 10-digit phone number";
     }
-    if (!formData.institution) newErrors.institution = 'Institution is required';
+    if (!formData.institution)
+      newErrors.institution = "Institution is required";
     return newErrors;
   };
 
@@ -70,7 +103,7 @@ const Signup = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors); // Set errors if validation fails
     } else {
-      setErrorMessage('');
+      setErrorMessage("");
       setStep(step + 1); // Move to the next step if validation passes
     }
   };
@@ -78,64 +111,77 @@ const Signup = () => {
   const handlePreviousStep = () => {
     setStep(step - 1); // Go back to Step 1
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = validateStep2();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors); // Set errors if validation fails
-      return;
-    }
-
-    setErrorMessage('');
-    setSuccessMessage('');
 
     if (isOtpSent) {
       try {
-        const response = await axios.post('https://urmila-backend.onrender.com/verify-otp', {
-          email: formData.email,
-          otp,
-        });
+        setIsLoading(true); // Start loading
+        const response = await axios.post(
+          "https://urmila-backend.onrender.com/verify-otp",
+          {
+            email: formData.email,
+            otp,
+          }
+        );
         const { token } = response.data;
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
         setSuccessMessage(response.data.msg);
-        navigate('/mycourses', { replace: true });
+        setIsModalOpen(false); // Close modal
+        navigate("/mycourses", { replace: true });
       } catch (error) {
-        setErrorMessage(error.response?.data?.msg || 'Error occurred during OTP verification.');
+        setErrorMessage(
+          error.response?.data?.msg || "Error occurred during OTP verification."
+        );
+      } finally {
+        setIsLoading(false); // End loading
       }
     } else {
       try {
-        const response = await axios.post('https://urmila-backend.onrender.com/register', {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone,
-          institution: formData.institution,
-          occupation: formData.occupation,
-        });
+        setIsLoading(true); // Start loading
+        const response = await axios.post(
+          "https://urmila-backend.onrender.com/register",
+          {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            phone: formData.phone,
+            institution: formData.institution,
+            occupation: formData.occupation,
+          }
+        );
 
         setSuccessMessage(response.data.msg);
         setIsOtpSent(true);
         setIsModalOpen(true);
       } catch (error) {
-        setErrorMessage(error.response?.data?.msg || 'Error occurred during registration.');
+        setErrorMessage(
+          error.response?.data?.msg || "Error occurred during registration."
+        );
+      } finally {
+        setIsLoading(false); // End loading
       }
     }
   };
 
   return (
-    <div className="flex justify-center items-center pr-6 pt-20 min-h-screen">
-      <div className="p-6 sm:p-8 w-full max-w-md bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">Sign up and start learning</h2>
+    <div className="flex justify-center px-4 sm:px-8 py-10 min-h-screen">
+      <div className="bg-white p-8 rounded-lg w-full max-w-md shadow-lg">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
+          Sign up and start learning
+        </h2>
 
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
-        {successMessage && <p className="text-green-500 mb-4">{successMessage}</p>}
+        {successMessage && (
+          <p className="text-green-500 mb-4">{successMessage}</p>
+        )}
 
-        {/* Step 1: Basic Information */}
         {step === 1 && (
           <form onSubmit={handleNextStep} className="space-y-6">
             <div>
-              <label className="text-gray-700 font-medium mb-1">Name <span className="text-red-500">*</span></label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Name <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="name"
@@ -143,10 +189,14 @@ const Signup = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name}</p>
+              )}
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Email <span className="text-red-500">*</span></label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Email <span className="text-red-500">*</span>
+              </label>
               <input
                 type="email"
                 name="email"
@@ -154,10 +204,14 @@ const Signup = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email}</p>
+              )}
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Password <span className="text-red-500">*</span></label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Password <span className="text-red-500">*</span>
+              </label>
               <input
                 type="password"
                 name="password"
@@ -165,7 +219,9 @@ const Signup = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-red-500 text-sm">{errors.password}</p>
+              )}
             </div>
 
             <button
@@ -175,7 +231,7 @@ const Signup = () => {
               Next
             </button>
 
-            <p className="text-center mt-4 text-sm">
+            <p className="text-center mt-4">
               Already have an account?{" "}
               <a href="/login" className="text-blue-500 hover:underline">
                 Login
@@ -187,7 +243,9 @@ const Signup = () => {
         {step === 2 && (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Phone Number <span className="text-red-500">*</span></label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="phone"
@@ -195,10 +253,14 @@ const Signup = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="text-red-500 text-sm">{errors.phone}</p>
+              )}
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Occupation <span className="text-red-500">*</span></label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Occupation <span className="text-red-500">*</span>
+              </label>
               <select
                 name="occupation"
                 value={formData.occupation}
@@ -210,7 +272,10 @@ const Signup = () => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Institution/Organization Name <span className="text-red-500">*</span></label>
+              <label className="block text-gray-700 font-medium mb-1">
+                Institution/Organization Name{" "}
+                <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="institution"
@@ -218,25 +283,82 @@ const Signup = () => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
-              {errors.institution && <p className="text-red-500 text-sm">{errors.institution}</p>}
+              {errors.institution && (
+                <p className="text-red-500 text-sm">{errors.institution}</p>
+              )}
             </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+              disabled={isLoading}
+              className={`w-full py-2 rounded-md text-lg transition-colors ${
+                isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-600 hover:bg-green-700 text-white"
+              }`}
             >
-              {isOtpSent ? 'Verify OTP' : 'Sign Up'}
+              {isLoading ? "Sending OTP..." : "Submit"}
+            </button>
+
+            <button
+              type="button"
+              onClick={handlePreviousStep}
+              className="w-full bg-gray-400 text-white py-2 rounded-md hover:bg-gray-500 transition-colors mt-4"
+            >
+              Back
             </button>
           </form>
         )}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 px-4">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+            <h3 className="text-2xl font-bold mb-6 text-center text-gray-800">
+              Enter OTP
+            </h3>
+            <p className="text-gray-600 text-center mb-4">
+              A 6-digit OTP has been sent to your registered email.
+            </p>
+            <div className="flex justify-center space-x-2 mb-6">
+              {/* OTP input boxes */}
+              {[...Array(6)].map((_, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  maxLength="1"
+                  id={`otp-input-${index}`}
+                  onChange={(e) => handleOtpInput(e, index)}
+                  onKeyDown={(e) => handleBackspace(e, index)}
+                  className="w-12 h-12 text-center text-2xl border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              ))}
+            </div>
+            <button
+              onClick={handleSubmit}
+              disabled={isLoading}
+              className={`w-full py-2 rounded-md text-lg transition-colors ${
+                isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 text-white"
+              }`}
+            >
+              {isLoading ? "Verifying..." : "Verify OTP"}
+            </button>
+            {/* <button
+            onClick={handleResendOtp}
+            className="w-full text-blue-500 mt-4 hover:underline text-sm"
+          >
+            Resend OTP
+          </button> */}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Signup;
-
-
 
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
