@@ -18,7 +18,7 @@ export default function MentorshipPage() {
         {/* Program Details and Benefits */}
         <div className="grid gap-6 md:gap-8 md:grid-cols-2 mb-8 md:mb-12">
           <InfoCard title="Program Details" items={programDetails} />
-          <InfoCard title="Why Choose Us?" items={whyChooseUs} />
+          <InfoCard title="Benefits" items={whyChooseUs} />
         </div>
 
         {/* Call to Action */}
