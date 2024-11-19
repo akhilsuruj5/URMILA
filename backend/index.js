@@ -175,7 +175,7 @@ app.post("/forgot-password", async (req, res) => {
 
     await user.save();
 
-    const resetURL = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetURL = `https://www.urmila.academy/reset-password/${resetToken}`;
 
     const transporter = nodemailer.createTransport({
       host: 'smtp.hostinger.com',
@@ -310,6 +310,67 @@ app.get("/user", authenticateToken, async (req, res) => {
   }
 });
 
+
+
+// POST /register - Send emails to user and admin
+app.post("/registermentor", async (req, res) => {
+  const { name, email, program } = req.body; // Expect name, email, and program in the request body
+
+  // Configure nodemailer transporter
+  const transporter = nodemailer.createTransport({
+    host: "smtp.hostinger.com",
+    port: 465,
+    secure: true, // Use SSL
+    auth: {
+      user: process.env.EMAIL_USER, // Your email (admin email)
+      pass: process.env.EMAIL_PASS, // Your email password
+    },
+  });
+
+  // Email content for the user
+  const userEmailContent = `
+    <h2>Hi ${name},</h2>
+    <p>Thank you for registering for the <strong>${program}</strong> mentorship program!</p>
+    <p>We will reach out to you shortly with more details.</p>
+    <p>Best Regards,<br>URMILA Team</p>
+  `;
+
+  // Email content for the admin
+  const adminEmailContent = `
+    <h2>New Registration</h2>
+    <p>A new user has registered for the mentorship program:</p>
+    <ul>
+      <li><strong>Name:</strong> ${name}</li>
+      <li><strong>Email:</strong> ${email}</li>
+      <li><strong>Program:</strong> ${program}</li>
+    </ul>
+    <p>Best Regards,<br>URMILA Team</p>
+  `;
+
+  try {
+    // Send email to the user
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: `Registration Confirmation for ${program}`,
+      html: userEmailContent,
+    });
+
+    // Send email to the admin
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Admin's email
+      subject: `New Registration: ${name}`,
+      html: adminEmailContent,
+    });
+
+    res.status(200).json({ message: "Emails sent successfully" });
+  } catch (error) {
+    console.error("Error sending emails:", error);
+    res.status(500).json({ message: "Failed to send emails" });
+  }
+});
+
 app.post('/send-email', async (req, res) => {
   const { name, email, phone, occupation, institution, title } = req.body.userData;
 
@@ -373,6 +434,8 @@ const adminEmailContent = `
     
     console.log('hello2');
     try {
+
+
       const transporter = nodemailer.createTransport({
         host: 'smtp.hostinger.com',
         port: 465,
@@ -382,7 +445,13 @@ const adminEmailContent = `
         pass: process.env.EMAIL_PASS,
       },
     });
-    console.log('hello3');
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: `Registration Initiation: ${title}`,
+      html: userEmailContent,
+    });
     
     await transporter.sendMail({
       from: process.env.EMAIL_USER,

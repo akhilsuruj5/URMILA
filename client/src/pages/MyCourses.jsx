@@ -170,16 +170,16 @@ const MyCourses = () => {
 
     try {
       const response = await axios.post(
-        "https://urmila-backend.onrender.com/send-email",
-        {
-          userData,
+      "https://urmila-backend.onrender.com/send-email",
+      {
+        userData,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      }
+    );
 
       if (response.status === 200) {
         toast.success(
@@ -282,7 +282,7 @@ const MyCourses = () => {
                 <h3 className="text-lg font-semibold line-clamp-2">
                   {course.title}
                 </h3>
-                <p className="text-gray-700 text-sm leading-6 line-clamp-6">
+                <p className="text-gray-700 text-sm leading-6 line-clamp-6 text-justify">
   {course.description}
 </p>
 

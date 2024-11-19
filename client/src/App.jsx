@@ -14,6 +14,8 @@ import ContactUs from "./pages/ContactUs";
 import ScrollToTop from "./ScrollToTop";
 import NotFound from "./pages/PageNotFound";
 import MentorshipPage from "./pages/OneOnOneMentoship";
+import InternshipSupport from "./pages/InternshipSupport";
+import AssignmentMentorship from "./pages/Mentorship";
 
 function App() {
   return (
@@ -34,7 +36,8 @@ function App() {
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password/:token" element={<ResetPassword />} />
           <Route path="one-on-one-mentorship" element={<MentorshipPage />} />
-          {/* <Route path="mentorship" element={<Mentorship />} /> */}
+          <Route path="mentorship" element={<AssignmentMentorship />} />
+          <Route path="placementsupport" element={<InternshipSupport />} />
         </Route>
 
         {/* Route without Layout */}
