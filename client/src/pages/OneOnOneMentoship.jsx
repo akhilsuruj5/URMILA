@@ -1,11 +1,135 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { CheckCircle, Users } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";  
+import { useNavigate } from "react-router-dom";
 
 export default function MentorshipPage() {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
+  const fetchUserData = async () => {
+    let token = localStorage.getItem("token");
+
+    if (!token) {
+      setError("User not found, please log in again.");
+      return;
+    }
+
+    try {
+      const response = await axios.get(
+        "https://urmila-backend.onrender.com/user",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      if (error.response && error.response.status === 401) {
+        try {
+          const refreshResponse = await axios.post(
+            "https://urmila-backend.onrender.com/refresh-token"
+          );
+          token = refreshResponse.data.accessToken;
+          localStorage.setItem("token", token);
+
+          const retryResponse = await axios.get(
+            "https://urmila-backend.onrender.com/user",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          setUser(retryResponse.data);
+        } catch (refreshError) {
+          console.error("Error refreshing token:", refreshError);
+          setError("Session expired, please log in again.");
+          toast.error("Session expired, please log in again.");  
+          localStorage.removeItem("token");
+        }
+      } else {
+        setError("Error fetching user details");
+        toast.error("Error fetching user details");  
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const handleRegister = async (mentorshipType) => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+  
+    setLoading(true);
+    setMessage(null);
+  
+    try {
+      const response = await axios.post(
+        "https://urmila-backend.onrender.com/api/register/mentorship",
+        { userId: user._doc._id, mentorshipType },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response.status === 201) {
+        const emailResponse = await axios.post(
+          "https://urmila-backend.onrender.com/send-mentorship-email",
+          {
+            user: user._doc,mentorshipType
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+  
+        if (emailResponse.status === 200) {
+          setMessage({ type: "success", text: response.data.message });
+        toast.success(response.data.message);
+        } else if (response.status === 400 && response.data.error === 'You are already registered for this mentorship.') {
+          setMessage({ type: "error", text: response.data.error });
+          toast.info(response.data.error); 
+        }
+        else {
+          toast.error("Failed to register for the course. Please try again.");
+        }
+      } else {
+        toast.error("Failed to register for the course. Please try again.");
+      }
+    } catch (error) {
+      if (error.response.status === 400 && error.response.data.error === 'You are already registered for this mentorship.') {
+        setMessage({ type: "error", text: error.response.data.error });
+        toast.info(error.response.data.error); 
+      } else if (error.request) {
+        console.log("Error request:", error.request);
+        setMessage({ type: "error", text: error.response.data.error });
+        toast.error(error.response.data.error); 
+      }
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8 md:py-12">
-        {/* Header */}
         <header className="text-center mb-8 md:mb-12">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4">
             One-to-One Mentorship Program
@@ -15,20 +139,28 @@ export default function MentorshipPage() {
           </p>
         </header>
 
-        {/* Program Details and Benefits */}
         <div className="grid gap-6 md:gap-8 md:grid-cols-2 mb-8 md:mb-12">
           <InfoCard title="Program Details" items={programDetails} />
           <InfoCard title="Benefits" items={whyChooseUs} />
         </div>
 
-        {/* Call to Action */}
         <div className="text-center">
-          <Button onClick={() => alert("Registration form would open here")}>
-            Register Now
+          <Button onClick={() => handleRegister("One-to-One Mentorship Program")}>
+            {loading ? "Registering..." : "Register Now"}
           </Button>
+          {message && (
+            <div
+              className={`mt-4 text-lg ${
+                message.type === "success"
+                  ? "text-green-600"
+                  : "text-red-600"
+              }`}
+            >
+              {message.text}
+            </div>
+          )}
         </div>
 
-        {/* Community Section */}
         <div className="mt-12 text-center">
           <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
             Join Our Growing Community
@@ -41,11 +173,12 @@ export default function MentorshipPage() {
           </div>
         </div>
       </div>
+
+      <ToastContainer />  
     </div>
   );
 }
 
-// InfoCard Component
 function InfoCard({ title, items }) {
   return (
     <Card>
@@ -66,7 +199,6 @@ function InfoCard({ title, items }) {
   );
 }
 
-// Card Component
 function Card({ children }) {
   return (
     <div className="bg-green-50 shadow-lg rounded-lg overflow-hidden border border-green-200">
@@ -75,24 +207,24 @@ function Card({ children }) {
   );
 }
 
-// CardContent Component
 function CardContent({ children }) {
   return <div className="p-4 sm:p-6">{children}</div>;
 }
 
-// Button Component
-function Button({ children, onClick }) {
+function Button({ children, onClick, disabled }) {
   return (
     <button
-      className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full text-base sm:text-lg transition duration-300 ease-in-out transform hover:scale-105"
+      className={`bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full text-base sm:text-lg transition duration-300 ease-in-out transform ${
+        disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+      }`}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
   );
 }
 
-// Static Data
 const programDetails = [
   "Personalized 1:1 sessions with expert mentors",
   "Flexible scheduling to fit your needs",
