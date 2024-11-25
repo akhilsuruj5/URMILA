@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import TestimonialForm from "../components/TestinomialForm";
+import TestimonialForm from "../components/TestimonialForm";
 
 const MyCourses = () => {
   const [user, setUser] = useState(null);
