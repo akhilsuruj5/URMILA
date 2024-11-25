@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const crypto = require("crypto");
 
+const Registration = require("./models/Registration");
+const Offering = require("./models/Offerings");
 const app = express();
 
 app.use(express.json());
@@ -23,6 +25,8 @@ const User = require("./models/User");
 const authenticateToken = require("./middlewares/auth");
 
 const nodemailer = require("nodemailer");
+const router = require("./routes/registerRoutes");
+const Testimonial = require("./models/Testimonial");
 
 
 app.post("/register", async (req, res) => {
@@ -374,14 +378,6 @@ app.post("/registermentor", async (req, res) => {
 app.post('/send-email', async (req, res) => {
   const { name, email, phone, occupation, institution, title } = req.body.userData;
 
-  // const transporter = nodemailer.createTransport({
-  //   service: "gmail",
-  //   auth: {
-  //     user: process.env.EMAIL_USER,
-  //     pass: process.env.EMAIL_PASS,
-  //   },
-  // });
-
   console.log('hello1');
   const transporter = nodemailer.createTransport({
     host: 'smtp.hostinger.com',
@@ -487,7 +483,6 @@ app.post('/refresh-token', (req, res) => {
   });
 });
 
-
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -510,6 +505,316 @@ app.post("/login", async (req, res) => {
 
 app.get("/", (req, res) => {
   res.send("Welcome to the backend!");
+});
+
+
+app.post('/api/register/mentorship', async (req, res) => {
+  try {
+    const { userId, mentorshipType } = req.body; 
+    if (!mentorshipType || !['One-to-One Mentorship Program', 'Assignment-Based Mentorship'].includes(mentorshipType)) {
+      return res.status(400).json({ error: 'Invalid mentorship type' });
+    }
+
+    // Fetch the corresponding mentorship offering based on the type
+    const mentorshipOffering = await Offering.findOne({ 
+      type: 'mentorship',
+      name: mentorshipType // Match the type and name of the mentorship offering
+    });
+
+    if (!mentorshipOffering) {
+      return res.status(404).json({ error: `${mentorshipType} offering not found` });
+    }
+
+    // Check if the user is already registered for this mentorship offering
+    const existingRegistration = await Registration.findOne({ 
+      user: userId, 
+      offering: mentorshipOffering._id 
+    });
+
+    if (existingRegistration) {
+      return res.status(400).json({ error: 'You are already registered for this mentorship.' });
+    }
+
+    // Create a new registration
+    const newRegistration = new Registration({
+      user: userId,
+      offering: mentorshipOffering._id,
+      status: 'pending', // default to pending
+    });
+
+    await newRegistration.save();
+
+    res.status(201).json({
+      message: `Successfully registered for ${mentorshipType}!`,
+      registrationId: newRegistration._id,
+    });
+  } catch (error) {
+    console.error('Error registering for mentorship:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+app.post('/api/register/course', async (req, res) => {
+  try {
+    const { userId, courseId } = req.body; 
+    console.log(userId);
+    console.log(courseId);
+    console.log('hellpo1')
+    // Fetch the corresponding course offering based on the course ID
+    const courseOffering = await Offering.findOne({ 
+      _id: courseId, 
+      type: 'course' 
+    });
+    
+    if (!courseOffering) {
+      return res.status(404).json({ error: 'Course not found' });
+    }
+    console.log('hellpo2')
+
+    // Check if the user is already registered for this course offering
+    const existingRegistration = await Registration.findOne({
+      user: userId,
+      offering: courseOffering._id
+    });
+
+    if (existingRegistration) {
+      return res.status(400).json({ error: 'You are already registered for this course.' });
+    }
+
+    // Create a new registration
+    const newRegistration = new Registration({
+      user: userId,
+      offering: courseOffering._id,
+      status: 'pending', // Default to pending
+    });
+
+    await newRegistration.save();
+
+    res.status(201).json({
+      message: `Successfully registered for ${courseOffering.name}!`,
+      registrationId: newRegistration._id,
+    });
+  } catch (error) {
+    console.error('Error registering for course:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+app.get("/api/courses/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Validate if the ID is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid Course ID" });
+    }
+
+    // Fetch the course directly using findById
+    const course = await Offering.findById(id);
+
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    res.status(200).json(course);
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
+app.get('/api/courses', async (req, res) => {
+  try {
+    // Fetch offerings where type is 'course'
+    const courses = await Offering.find({ type: 'course' });
+
+    // Return the fetched courses
+    res.status(200).json(courses);
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+// app.get("/api/registrations/enrolled", async (req, res) => {
+//   const userId = req.query.userId;
+//   console.log(userId);
+//   try {
+//     const registrations = await Registration.find({
+//       user: userId,
+//       status: "completed", // Filter only completed registrations
+//     }).populate("course"); // Populate course details
+    
+//     console.log(registrations, 'registratios');
+//     const enrolledCourses = registrations.map((reg) => reg.course);
+//     res.status(200).json(enrolledCourses);
+//   } catch (error) {
+//     console.error("Error fetching enrolled courses:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+const getEnrolledCourses = async (userId) => {
+  try {
+    // Find registrations for the user where offerings are of type 'course' and status is 'completed'
+    const enrolledCourses = await Registration.find({ user: userId, status: 'completed' })
+      .populate({
+        path: 'offering',
+        match: { type: 'course' }, // Match only offerings of type 'course'
+      })
+      .exec();
+
+    // Filter out any registrations where offering didn't match (null after population)
+    const filteredCourses = enrolledCourses.filter((registration) => registration.offering !== null);
+
+    return filteredCourses;
+  } catch (error) {
+    console.error('Error fetching enrolled courses:', error);
+    throw error;
+  }
+};
+
+
+app.get('/api/registrations/enrolled', async (req, res) => {
+  const userId = req.query.userId; // Use query parameter for userId
+  try {
+    const enrolledCourses = await Registration.find({ user: userId, status: 'completed' })
+      .populate('offering') // Populate offering details
+      .exec();
+
+    res.status(200).json(enrolledCourses);
+  } catch (error) {
+    console.error('Error fetching enrolled courses:', error);
+    res.status(500).json({ message: 'Error fetching enrolled courses' });
+  }
+});
+
+
+
+app.post('/send-mentorship-email', async (req, res) => {
+  const { name, email, phone, occupation, institution } = req.body.user;
+  const { mentorshipType } = req.body;
+
+  console.log('hello1');
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.hostinger.com',
+    port: 465,
+    secure: true, // use SSL
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  console.log('hello1');
+  const userEmailContent = `
+  <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
+    <h2 style="color: #333;">Hi ${name},</h2>
+    <p style="color: #555;">
+      You have initiated mentorship registration for <strong style="color: #0056b3;">${mentorshipType}</strong>.
+    </p>
+    <p style="color: #555;">
+      Thank you for your interest! We will process your request shortly.
+    </p>
+    <p style="color: #555;">
+      You will receive a call from us within the next 24 hours to assist you further.
+    </p>
+    <footer style="margin-top: 20px;">
+      <p style="color: #888;">Best Regards,<br>URMILA - Unified Resource Management Institute for Logistics and Analytics</p>
+    </footer>
+  </div>
+  `;
+
+  const adminEmailContent = `
+  <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
+    <h2 style="color: #333;">New Mentorship Registration Request</h2>
+    <p style="color: #555;">User Details:</p>
+    <ul style="list-style-type: none; padding-left: 0; color: #555;">
+      <li style="margin-bottom: 5px;"><strong>Name:</strong> ${name}</li>
+      <li style="margin-bottom: 5px;"><strong>Email:</strong> ${email}</li>
+      <li style="margin-bottom: 5px;"><strong>Phone:</strong> ${phone}</li>
+      <li style="margin-bottom: 5px;"><strong>Occupation:</strong> ${occupation}</li>
+      <li style="margin-bottom: 5px;"><strong>Institution:</strong> ${institution}</li>
+    </ul>
+    <p style="color: #555;">Mentorship Interested: <strong style="color: #0056b3;">${mentorshipType}</strong></p>
+    <footer style="margin-top: 20px;">
+      <p style="color: #888;">Best Regards,<br>Technical team</p>
+      <p style="color: #888;">URMILA - Unified Resource Management Institute for Logistics and Analytics</p>
+    </footer>
+  </div>
+  `;
+
+  console.log('hello2');
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: `Registration Initiation: ${mentorshipType}`,
+      html: userEmailContent,
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: 'New Mentorship Registration Request',
+      html: adminEmailContent,
+    });
+
+    console.log('hello4');
+    res.status(200).send('Emails sent successfully');
+  } catch (error) {
+    console.error('Error sending emails:', error);
+    res.status(500).send('Error sending emails');
+  }
+});
+
+
+
+
+app.post("/api/testimonials", async (req, res) => {
+  try {
+    const { name, linkedin, text, photo, course } = req.body;
+
+    // Validate required fields
+    if (!name || !text ) {
+      return res.status(400).json({ message: "All fields are required." });
+    }
+
+    const testimonialStatus =  "pending";
+
+    // Create a new testimonial
+    const newTestimonial = new Testimonial({
+      name,
+      linkedin,
+      text,
+      photo,
+      status: testimonialStatus, // Save the status to the database
+    });
+
+    // Save to the database
+    await newTestimonial.save();
+
+    res.status(201).json({ message: "Testimonial submitted successfully!" });
+  } catch (error) {
+    console.error("Error saving testimonial:", error.message);
+    res.status(500).json({ message: "Failed to submit testimonial." });
+  }
+});
+
+app.get("/api/testimonials", async (req, res) => {
+  try {
+    // Only return testimonials with status 'approved'
+    const testimonials = await Testimonial.find();
+    res.json(testimonials);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching testimonials", error });
+  }
 });
 
 const PORT = process.env.PORT || 5000;
