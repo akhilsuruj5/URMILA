@@ -174,60 +174,61 @@ const CourseDetails = () => {
 
   return (
     <div className="min-h-screen">
-      <ToastContainer />
-      <div className="bg-white ">
-        <div className="mb-10">
-          {course.image ? (
-            <img
-              src={course.image}
-              alt={course.title}
-              className="w-full max-h-80 object-cover "
-            />
-          ) : (
-            <div className="pl-20 w-full max-h-60 bg-gray-200 flex items-center justify-center rounded-md text-gray-500">
-              Image Unavailable
-            </div>
-          )}
+  <ToastContainer />
+  <div className="bg-white">
+    <div className="mb-10">
+      {course.image ? (
+        <img
+          src={course.image}
+          alt={course.title}
+          className="w-full max-h-80 object-cover"
+        />
+      ) : (
+        <div className="w-full max-h-60 bg-gray-200 flex items-center justify-center rounded-md text-gray-500">
+          Image Unavailable
         </div>
+      )}
+    </div>
 
-        <h1 className="text-3xl font-bold mb-4 pl-32 text-gray-800">
-          {course.name}
-        </h1>
+    <h1 className="text-2xl md:text-3xl font-bold mb-4 px-4 md:px-8 lg:pl-32 text-gray-800">
+      {course.name}
+    </h1>
 
-        <p className="text-base text-gray-700 leading-relaxed mb-6 px-32 pr-60">
-          {course.description}
-        </p>
+    <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-6 px-4 md:px-8 lg:px-32 lg:pr-60">
+      {course.description}
+    </p>
 
-        <div className="px-32">
-  <h2 className="text-xl font-semibold text-gray-800 mb-3">
-    Table of Content
-  </h2>
-  {course.tableOfContent && course.tableOfContent.length > 0 ? (
-    <ul className="list-disc pl-6 text-gray-700 leading-6">
-      {course.tableOfContent.map((item, index) => (
-        <li key={index}>{item}</li>
-      ))}
-    </ul>
-  ) : (
-    <p className="text-gray-500">No content available.</p>
-  )}
+    <div className="px-4 md:px-8 lg:px-32">
+      <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-3">
+        Table of Content
+      </h2>
+      {course.tableOfContent && course.tableOfContent.length > 0 ? (
+        <ul className="list-disc pl-6 text-gray-700 leading-6">
+          {course.tableOfContent.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No content available.</p>
+      )}
+    </div>
+
+    <div className="px-4 md:px-8 lg:pl-32 mt-6 flex justify-center lg:justify-start">
+      <button
+        className={`w-full md:w-auto px-6 md:px-12 py-3 text-sm rounded-md ${
+          isLoading
+            ? "bg-gray-400 text-white"
+            : "bg-green-600 text-white hover:bg-green-700"
+        }`}
+        onClick={handleRegister}
+        disabled={isLoading}
+      >
+        {isLoading ? "Registering..." : "Register"}
+      </button>
+    </div>
+  </div>
 </div>
 
-        <div className="pl-32 mt-6">
-          <button
-            className={`w-auto px-12 mb-12 mt-4 py-3 text-sm rounded-md ${
-              isLoading
-                ? "bg-gray-400 text-white"
-                : "bg-green-600 text-white hover:bg-green-700"
-            }`}
-            onClick={handleRegister}
-            disabled={isLoading}
-          >
-            {isLoading ? "Registering..." : "Register"}
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };
 
