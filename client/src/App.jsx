@@ -16,6 +16,7 @@ import NotFound from "./pages/PageNotFound";
 import MentorshipPage from "./pages/OneOnOneMentoship";
 import InternshipSupport from "./pages/InternshipSupport";
 import AssignmentMentorship from "./pages/Mentorship";
+import CourseDetails from "./pages/CourseDetails";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="one-on-one-mentorship" element={<MentorshipPage />} />
           <Route path="mentorship" element={<AssignmentMentorship />} />
           <Route path="placementsupport" element={<InternshipSupport />} />
+          <Route path="/courses/:courseId" element={<CourseDetails />} />
         </Route>
 
         {/* Route without Layout */}

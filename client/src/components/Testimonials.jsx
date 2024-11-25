@@ -8,7 +8,6 @@ const Testimonials = () => {
   const testimonials = [
     {
       name: "Mayuresh Jahagirdar",
-      role: "",
       text: (
         <>
           I had the privilege of being mentored by Akhilesh Kushawaha under the
@@ -33,7 +32,6 @@ const Testimonials = () => {
     },
     {
       name: "Sanjeev Maurya",
-      role: "",
       text: (
         <>
           I am incredibly grateful to have had the opportunity to learn from
@@ -57,7 +55,6 @@ const Testimonials = () => {
     },
     {
       name: "Ankita Kushwaha",
-      role: "",
       text: (
         <>
           I am incredibly grateful for the mentorship I received from Akhilesh

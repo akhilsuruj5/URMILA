@@ -9,41 +9,41 @@ const enrolledCourses = [];
 const allCourses = [
   {
     id: 1,
-    title: "Intensive Certificate Course : Warehouse Solutions",
+    title: "Intensive Certificate Course: Warehouse Solutions",
     description:
-      "Our certificate course on Warehouse Solutions provides in-depth training on the planning, layout, and operational optimization of modern warehouses. This course is designed to equip participants with the skills to create efficient, scalable warehouse solutions that enhance productivity and reduce costs while fulfilling operational requirements.",
+      "Design and optimize warehouses, enhance productivity, and create scalable, cost-effective solutions for efficient operations.",
     enrolled: false,
     image: "/course1.png?height=100&width=200",
   },
   {
     id: 2,
-    title: "Intensive Certificate Course : Warehouse Operations",
+    title: "Intensive Certificate Course: Warehouse Operations",
     description:
-      "Our certificate course on Warehouse Operations provides essential training in the day-to-day management and optimization of warehouse processes, aimed at improving efficiency, accuracy, and productivity. Participants gain a comprehensive understanding of the operational and strategic aspects required to manage modern warehouses effectively.",
+      "Learn warehouse management, improve efficiency, and develop strategic skills for optimizing operations.",
     enrolled: false,
     image: "/course21.png?height=100&width=200",
   },
   {
     id: 5,
-    title: "Intensive Certificate Course : Transport Operations",
+    title: "Intensive Certificate Course: Transport Operations",
     description:
-      "Our certificate course on Transport Operations provides foundational knowledge and practical skills for managing and optimizing transportation within supply chains. The course covers the key processes, technologies, and strategies needed to ensure timely, cost-effective, and efficient movement of goods.",
+      "Master strategies and processes for efficient, cost-effective transport within supply chains.",
     enrolled: false,
     image: "/course51.png?height=100&width=200",
   },
   {
     id: 3,
-    title: "Intensive Certificate Course : Freight Forwarding",
+    title: "Intensive Certificate Course: Freight Forwarding",
     description:
-      "Our certificate course on Freight Forwarding provides essential knowledge and skills for managing the movement of goods across international and domestic supply chains. It covers the end-to-end process of freight forwarding, focusing on logistics, documentation, regulations, and the various modes of transportation.",
+      "Understand logistics, documentation, and regulations for managing goods movement globally.",
     enrolled: false,
     image: "/transport.jpg?height=100&width=200",
   },
   {
     id: 4,
-    title: "Executive Course : Logistics Management",
+    title: "Executive Course: Logistics Management",
     description:
-      "Our executive Course in Logistics Management is designed for professionals looking to enhance their strategic understanding and operational skills across all aspects of logistics, including warehouse solutions, transportation, freight forwarding, and supply chain management. The course covers both foundational and advanced topics, equipping participants with the knowledge to manage and optimize complex logistics operations.",
+      "Develop advanced skills in logistics, covering warehouses, transportation, and supply chains.",
     enrolled: false,
     image: "/course3.png?height=100&width=200",
   },
@@ -75,10 +75,14 @@ const OurOfferings = () => {
             </div>
           )}
         </div>
-
-        <div className="grid gap-6 md:grid-cols-2 pt-6 lg:grid-cols-3">
-          {(activeTab === "enrolled" ? enrolledCourses : filteredAllCourses).map((course) => (
-            <div key={course.id} className="bg-white rounded-lg shadow-md">
+        <div className="container mx-auto px-6 lg:px-20 pt-6">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 ">
+    {(activeTab === "enrolled" ? enrolledCourses : filteredAllCourses).map(
+      (course) => (
+        <div
+          key={course.id}
+          className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-sm "
+        >
               <img
                 src={course.image}
                 alt={course.title}
@@ -109,6 +113,7 @@ const OurOfferings = () => {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </main>
     </div>

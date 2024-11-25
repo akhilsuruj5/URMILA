@@ -7,7 +7,6 @@ const Layout = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    console.log("Scrolling to top in layout...");
     const layoutElement = document.querySelector(".scrollable");
     layoutElement.scrollTop = 0;
   }, [pathname]);
