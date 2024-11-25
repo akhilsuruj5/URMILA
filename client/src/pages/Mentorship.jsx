@@ -78,7 +78,7 @@ const AssignmentMentorship = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/register/mentorship",
+        "https://urmila-backend.onrender.com/api/register/mentorship",
         { userId: user._doc._id, mentorshipType: "Assignment-Based Mentorship" }, 
         {
           headers: {
@@ -90,7 +90,7 @@ const AssignmentMentorship = () => {
 
       if (response.status === 201) {
         const emailResponse = await axios.post(
-          "http://localhost:5000/send-mentorship-email",
+          "https://urmila-backend.onrender.com/send-mentorship-email",
           {
             user: user._doc, mentorshipType: "Assignment-Based Mentorship"
           },
