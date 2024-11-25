@@ -37,7 +37,7 @@ export default function EnrollmentConfirmation() {
             </ul>
           </div>
           <div className="space-y-4">
-            <button onClick={() => navigate('/ourofferings')} className="block w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors">
+            <button onClick={() => navigate('/mycourses')} className="block w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition-colors">
               Browse More Courses
             </button>
             <button onClick={() => navigate('/mycourses')} className="block w-full bg-gray-200 text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300 transition-colors">
