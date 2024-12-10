@@ -1,9 +1,30 @@
 import { FaLinkedin, FaInstagram } from "react-icons/fa";
 import { TbBrandX } from "react-icons/tb";
+import { useEffect, useState } from "react";
 
 const AboutUs = () => {
+  const [teamMembers, setTeamMembers] = useState([]);
   const companyName =
     "Unified Resource Management Institute for Logistics and Analytics (URMILA)";
+
+
+    useEffect(() => {
+      // Fetch team members from the database
+      const fetchTeamMembers = async () => {
+        try {
+          const response = await fetch("https://urmila-backend.onrender.com/team");
+          const data = await response.json();
+          setTeamMembers(data);
+        } catch (error) {
+          console.error("Error fetching team members:", error);
+        }
+      };
+  
+      fetchTeamMembers();
+    }, []);
+
+
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white-50 to-white pb-16 pt-6">
       <main className="container mx-auto px-4 py-8 sm:py-12">
@@ -66,10 +87,7 @@ const AboutUs = () => {
                 </p>
               </div>
             </div>
-
-            {/* Second Line Onwards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
+            {/* [
                 {
                   name: "Akhilesh Kushawaha",
                   role: "Mentor- SCM",
@@ -94,14 +112,18 @@ const AboutUs = () => {
                   linkedin: "",
                   image: "testimonial.jpg",
                 },
-              ].map((member, index) => (
+              ] */}
+            {/* Second Line Onwards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {teamMembers.map((member, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center"
                 >
                   <div className="w-24 h-24 mb-4 overflow-hidden rounded-full">
                     <img
-                      src={`/${member.image}?height=96&width=96`}
+                      // src={`/${member.image}?height=96&width=96`}
+                      src={`${member.image}`}
                       alt={`${member.name} Image`}
                       className="w-full h-full object-cover"
                     />
