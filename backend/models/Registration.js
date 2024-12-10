@@ -11,4 +11,14 @@ const RegistrationSchema = new mongoose.Schema({
   registeredAt: { type: Date, default: Date.now } 
 });
 
+RegistrationSchema.pre('find', function () {
+  this.populate('user', 'name email occupation')
+      .populate('offering', 'name type');
+});
+
+RegistrationSchema.pre('findOne', function () {
+  this.populate('user', 'name email occupation')
+      .populate('offering', 'name type');
+});
+
 module.exports = mongoose.model('Registration', RegistrationSchema);
