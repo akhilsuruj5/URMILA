@@ -82,7 +82,7 @@ const signupAdmin = async (req, res) => {
     const verificationUrl = `https://admin.urmila.academy/admin/verify-account/${newAdmin.verificationToken}`;
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: "vinaymalik1729@gmail.com", // Support email
+      to: "support@urmila.academy", // Support email
       subject: "New Admin Signup - Pending Verification",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eaeaea; border-radius: 5px; background-color: #f9f9f9;">
