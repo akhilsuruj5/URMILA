@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import TestimonialForm from "../components/TestimonialForm";
+import TestimonialForm from "../components/TestinomialForm";
 
 const MyCourses = () => {
   const [user, setUser] = useState(null);
@@ -54,7 +54,7 @@ const MyCourses = () => {
     const fetchEnrolledCourses = async () => {
       let token = localStorage.getItem("token");
       if (!token || !user) return; // Ensure user exists before proceeding
-  console.log(user);
+  
   try {
     const response = await axios.get(
       `https://urmila-backend.onrender.com/api/registrations/enrolled?userId=${user._doc._id}`,
@@ -64,10 +64,9 @@ const MyCourses = () => {
         },
       }
     );
-  
+    console.log(response.data)
     if (Array.isArray(response.data)) {
       setEnrolledCourses(response.data); // Update state with fetched courses
-      console.log('Enrolled Courses:', response.data); // Log the assigned data
     } else {
       console.error('Unexpected response format:', response.data);
       toast.error('Unexpected response from the server');
@@ -186,7 +185,6 @@ const MyCourses = () => {
   <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
     {(activeTab === "enrolled" ? enrolledCourses : filteredAllCourses).map((course) => {
       const courseData = activeTab === "enrolled" ? course.offering : course; // Handle nested `offering` for enrolled courses
-      console.log(courseData);
       return (
         <div
           key={courseData._id}
