@@ -15,20 +15,6 @@ const InternshipSupport = () => {
           Internship & Placement Support
         </motion.h1>
 
-        {/* Image Section */}
-        {/* <motion.div
-          className="max-w-4xl mx-auto mb-12"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        >
-          <img
-            src="https://via.placeholder.com/800x400" // Replace this with a relevant image
-            alt="Internship and Placement"
-            className="rounded-lg shadow-lg w-full"
-          />
-        </motion.div> */}
-
         {/* Description Section */}
         <motion.div
           className="bg-green-100 p-8 rounded-lg shadow-md max-w-3xl mx-auto"
@@ -113,6 +99,21 @@ const InternshipSupport = () => {
               </p>
             </div>
           </div>
+        </motion.div>
+
+        {/* Job Portal Button Section */}
+        <motion.div
+          className="mt-12 text-center"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1, ease: "easeInOut" }}
+        >
+          <a
+            href="/jobs"
+            className="inline-block bg-green-700 text-white px-6 py-3 rounded-lg shadow-md text-lg font-semibold hover:bg-green-800 transition-colors"
+          >
+            Visit Job Portal
+          </a>
         </motion.div>
       </div>
     </div>

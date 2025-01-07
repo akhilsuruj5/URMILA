@@ -6,8 +6,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import TestimonialForm from "../components/TestimonialForm";
+import { useAuth } from "../Context/AuthContext";
 
 const MyCourses = () => {
+  const { logout } = useAuth();
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,8 +26,10 @@ const MyCourses = () => {
       let token = localStorage.getItem("token");
 
       if (!token) {
-        setError("User not found, please log in again.");
-        toast.error("User not found, please log in again.");
+        setError("Please log in again");
+        toast.error("Please log in again");
+        logout();
+        navigate("/login");
         return;
       }
 
@@ -41,8 +45,15 @@ const MyCourses = () => {
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-        toast.error("Please Login again");
-        setError("Error fetching user details");
+        if (error.response?.status === 401) {
+          // Token is invalid or expired
+          toast.error("Session expired. Please log in again.");
+          logout(); // Call logout to clear the token and update auth state
+          navigate("/login"); // Redirect to the login page
+        } else {
+          toast.error("Error fetching user details.");
+          setError("Error fetching user details.");
+        }
       }
     };
 

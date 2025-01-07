@@ -48,8 +48,14 @@ const Header = () => {
           <Link to="/mycourses">My Courses</Link>
         </li>
         <li>
+                  <Link to="/jobs" onClick={toggleMenu}>
+                    Jobs
+                  </Link>
+                </li>
+        <li>
           <Link to="/profile">Profile</Link>
         </li>
+
         <li>
           <button
             onClick={handleLogout}
@@ -64,6 +70,11 @@ const Header = () => {
         <li>
           <Link to="/contactus">Contact Us</Link>
         </li>
+        <li>
+                  <Link to="/jobs" onClick={toggleMenu}>
+                    Jobs
+                  </Link>
+                </li>
         <div className="flex items-center space-x-2">
           <li>
             <Link
@@ -110,6 +121,7 @@ const Header = () => {
                   Our Courses
                 </Link>
               </li>
+              
             )}
             {isAuthenticated ? (
               <>
@@ -118,11 +130,19 @@ const Header = () => {
                     My Courses
                   </Link>
                 </li>
+
+                <li>
+                  <Link to="/jobs" onClick={toggleMenu}>
+                    Jobs
+                  </Link>
+                </li>
+                
                 <li>
                   <Link to="/profile" onClick={toggleMenu}>
                     Profile
                   </Link>
                 </li>
+                
                 <li>
                   <button
                     onClick={() => {
@@ -140,6 +160,11 @@ const Header = () => {
                 <li>
                   <Link to="/contactus" onClick={toggleMenu}>
                     Contact Us
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/jobs" onClick={toggleMenu}>
+                    Jobs
                   </Link>
                 </li>
                 <li>

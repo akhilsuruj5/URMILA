@@ -40,6 +40,16 @@ const Footer = () => {
                   Contact Us
                 </button>
               </li>
+              <li>
+                <button onClick={() => navigate('/recruiter')} className="text-gray-400 hover:text-white transition-colors">
+                  Recruiter Login
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/browsejobs')} className="text-gray-400 hover:text-white transition-colors">
+                  Job Search
+                </button>
+              </li>
             </ul>
           </div>
           <div>
