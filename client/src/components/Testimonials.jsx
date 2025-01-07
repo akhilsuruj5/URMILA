@@ -28,6 +28,7 @@ const Testimonials = () => {
         </>
       ),
       image: "1679827921534.jfif",
+      image: "1679827921534.jfif",
       linkedin: "https://www.linkedin.com/in/mayuresh-jahagirdar-78368762/",
     },
     {
@@ -50,6 +51,7 @@ const Testimonials = () => {
           style has left a lasting impact on my approach to logistics.
         </>
       ),
+      image: "1692017549395.jfif",
       image: "1692017549395.jfif",
       linkedin: "https://www.linkedin.com/in/sanjeev-maurya-b73b517a/",
     },
@@ -89,6 +91,8 @@ const Testimonials = () => {
     arrows: true,
     autoplay: true,
     autoplaySpeed: 2000,
+    autoplay: true,
+    autoplaySpeed: 2000,
     responsive: [
       {
         breakpoint: 1024,
@@ -115,15 +119,35 @@ const Testimonials = () => {
           Testimonials
         </h2>
         <Slider {...settings}>
+        <Slider {...settings}>
           {testimonials.map((testimonial, index) => (
             <div key={index} className="p-4">
               <div
                 className="flex flex-col items-center justify-between text-center bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 min-h-[350px] max-h-[350px] flex-grow"
+                className="flex flex-col items-center justify-between text-center bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 min-h-[350px] max-h-[350px] flex-grow"
               >
+                <img
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
                   className="w-24 h-24 rounded-full mb-4"
+                />
+                <p
+                  className="text-gray-700 italic text-justify mb-4 max-h-[120px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
+                >
+                  {testimonial.text}
+                </p>
+                <div className="mt-auto">
+                  <a
+                    href={testimonial.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-gray-800 underline"
+                  >
+                    {testimonial.name}
+                  </a>
+                  <p className="text-sm text-gray-600 mb-2">{testimonial.role}</p>
+                </div>
                 />
                 <p
                   className="text-gray-700 italic text-justify mb-4 max-h-[120px] overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
