@@ -13,6 +13,8 @@ const testimonialRoutes = require("./routes/testimonialRoutes");
 const emailRoutes = require("./routes/emailRoutes");
 const  adminRoutes = require("./routes/adminRoutes");
 const  teamRoutes = require("./routes/teamRoutes");
+const  jobRoutes = require("./routes/jobRoutes");
+const  additionalAdminRoutes = require("./routes/additionalAdminRoutes");
 
 app.use(cors());
 
@@ -33,6 +35,8 @@ app.use(emailRoutes);
 app.use(teamRoutes);
 
 app.use(adminRoutes);
+app.use(jobRoutes);
+app.use(additionalAdminRoutes);
 
 app.get("/", (req, res) => res.send("Welcome to the API"));
 
