@@ -223,7 +223,17 @@ const Signup = () => {
                 <p className="text-red-500 text-sm">{errors.password}</p>
               )}
             </div>
-
+            <div className="text-center mt-4">
+  <p className="text-sm text-gray-600">
+    By signing up, you agree to our{' '}
+    <a 
+      href="/terms-and-conditions" 
+      className="text-blue-500 hover:underline"
+    >
+      Terms and Conditions
+    </a>.
+  </p>
+</div>
             <button
               type="submit"
               className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors"

@@ -17,7 +17,11 @@ import MentorshipPage from "./pages/OneOnOneMentoship";
 import InternshipSupport from "./pages/InternshipSupport";
 import AssignmentMentorship from "./pages/Mentorship";
 import CourseDetails from "./pages/CourseDetails";
-
+import JobsPage from "./pages/JobsPage";
+import JobDetailsPage from "./pages/JobDetailsPage";
+import BrowseJobs from "./pages/BrowseJobs";
+import ProfilePage from "./pages/ProfilePage";
+import TermsandConditions from "./pages/TermsandConditions";
 function App() {
   return (
     <BrowserRouter>
@@ -40,11 +44,17 @@ function App() {
           <Route path="mentorship" element={<AssignmentMentorship />} />
           <Route path="placementsupport" element={<InternshipSupport />} />
           <Route path="/courses/:courseId" element={<CourseDetails />} />
+          <Route path="/terms-and-conditions" element={<TermsandConditions />} />
         </Route>
 
         {/* Route without Layout */}
         
           <Route path="*" element={<NotFound />} />
+          <Route path="/jobs" element={<JobsPage />} />
+          <Route path="/browsejobs" element={<BrowseJobs />} />
+          <Route path="/jobprofile" element={<ProfilePage />} />
+          <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
+        {/* <Route path="/recruiter/editjob/:jobId" element={<EditJob />} /> */}
         <Route path="enrollment-confirmed" element={<EnrollmentConfirmation />} />
       </Routes>
     </BrowserRouter>

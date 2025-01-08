@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema({
       'Please provide a valid email address',
     ],
   },
+  role: {
+    type: String,
+    enum: ['JobSeeker', 'Recruiter'],
+    default: 'JobSeeker', 
+    required: true,
+  },
   phone: {
     type: String,
     match: [
