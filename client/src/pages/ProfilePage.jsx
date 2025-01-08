@@ -47,10 +47,10 @@ const ProfilePage = () => {
       try {
         setLoading(true);
         const [userResponse, profileResponse] = await Promise.all([
-          axios.get("http://localhost:5000/user", {
+          axios.get("https://urmila-webservice.onrender.com/user", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("http://localhost:5000/profile", {
+          axios.get("https://urmila-webservice.onrender.com/profile", {
             headers: { Authorization: `Bearer ${token}` },
           })
         ]);
@@ -87,10 +87,10 @@ const ProfilePage = () => {
       setLoading(true);
       const { name, email, phone, institution, ...profileData } = userData;
       await Promise.all([
-        // axios.put("http://localhost:5000/user", { name, email, phone, institution }, {
+        // axios.put("https://urmila-webservice.onrender.com/user", { name, email, phone, institution }, {
         //   headers: { Authorization: `Bearer ${token}` },
         // }),
-        axios.put("http://localhost:5000/profile", profileData, {
+        axios.put("https://urmila-webservice.onrender.com/profile", profileData, {
           headers: { Authorization: `Bearer ${token}` },
         })
       ]);

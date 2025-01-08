@@ -118,7 +118,7 @@ const Signup = () => {
       try {
         setIsLoading(true); // Start loading
         const response = await axios.post(
-          "https://urmila-backend.onrender.com/verify-otp",
+          "https://urmila-webservice.onrender.com/verify-otp",
           {
             email: formData.email,
             otp,
@@ -140,7 +140,7 @@ const Signup = () => {
       try {
         setIsLoading(true); // Start loading
         const response = await axios.post(
-          "https://urmila-backend.onrender.com/register",
+          "https://urmila-webservice.onrender.com/register",
           {
             name: formData.name,
             email: formData.email,
@@ -465,7 +465,7 @@ export default Signup;
 //     if (isOtpSent) {
 //       // OTP verification request
 //       try {
-//         const response = await axios.post('http://localhost:5000/verify-otp', {
+//         const response = await axios.post('https://urmila-webservice.onrender.com/verify-otp', {
 //           email: formData.email,
 //           otp,
 //         });
@@ -480,7 +480,7 @@ export default Signup;
 //     } else {
 //       // Registration request
 //       try {
-//         const response = await axios.post('http://localhost:5000/register', {
+//         const response = await axios.post('https://urmila-webservice.onrender.com/register', {
 //           name: formData.name,
 //           email: formData.email,
 //           password: formData.password,

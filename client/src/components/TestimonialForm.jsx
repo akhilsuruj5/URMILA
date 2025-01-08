@@ -18,7 +18,7 @@ const TestimonialForm = ({ courses }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://urmila-backend.onrender.com/api/testimonials", formData);
+      const response = await axios.post("https://urmila-webservice.onrender.com/api/testimonials", formData);
       toast.success(response.data.message);
       setFormData({
         name: "",

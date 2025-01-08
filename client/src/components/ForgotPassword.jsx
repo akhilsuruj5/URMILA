@@ -15,7 +15,7 @@ export default function ForgotPassword() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const response = await axios.post("https://urmila-backend.onrender.com/forgot-password", { email });
+      const response = await axios.post("https://urmila-webservice.onrender.com/forgot-password", { email });
       setMessage(response.data.msg);
       setError("");
       setIsLoading(false);

@@ -31,7 +31,7 @@ export default function Profile() {
     }
   
     try {
-      const response = await axios.get('https://urmila-backend.onrender.com/user', {
+      const response = await axios.get('https://urmila-webservice.onrender.com/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -44,12 +44,12 @@ export default function Profile() {
       if (error.response && error.response.status === 401) {
         // Token might have expired, try refreshing it
         try {
-          const refreshResponse = await axios.post('https://urmila-backend.onrender.com/refresh-token');
+          const refreshResponse = await axios.post('https://urmila-webservice.onrender.com/refresh-token');
           token = refreshResponse.data.accessToken;
           localStorage.setItem('token', token);
   
           // Retry fetching user data
-          const retryResponse = await axios.get('https://urmila-backend.onrender.com/user', {
+          const retryResponse = await axios.get('https://urmila-webservice.onrender.com/user', {
             headers: {
               Authorization: `Bearer ${token}`,
             },

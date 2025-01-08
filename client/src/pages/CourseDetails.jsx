@@ -18,7 +18,7 @@ const CourseDetails = () => {
       console.log(courseId, "coursesdnfjikd");
       try {
         const response = await axios.get(
-          `https://urmila-backend.onrender.com/api/courses/${courseId}`
+          `https://urmila-webservice.onrender.com/api/courses/${courseId}`
         );
         setCourse(response.data); 
       } catch (error) {
@@ -44,7 +44,7 @@ const CourseDetails = () => {
 
       try {
         const response = await axios.get(
-          "https://urmila-backend.onrender.com/user",
+          "https://urmila-webservice.onrender.com/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -59,14 +59,14 @@ const CourseDetails = () => {
           // Token might have expired, try refreshing it
           try {
             const refreshResponse = await axios.post(
-              "https://urmila-backend.onrender.com/refresh-token"
+              "https://urmila-webservice.onrender.com/refresh-token"
             );
             token = refreshResponse.data.accessToken;
             localStorage.setItem("token", token);
 
             // Retry fetching user data
             const retryResponse = await axios.get(
-              "https://urmila-backend.onrender.com/user",
+              "https://urmila-webservice.onrender.com/user",
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -116,7 +116,7 @@ const CourseDetails = () => {
   
     try {
       const registrationResponse = await axios.post(
-        "https://urmila-backend.onrender.com/api/register/course",
+        "https://urmila-webservice.onrender.com/api/register/course",
         {
           userId: userData.userId,
           courseId: userData.courseId,
@@ -130,7 +130,7 @@ const CourseDetails = () => {
   
       if (registrationResponse.status === 201) {
         const emailResponse = await axios.post(
-          "https://urmila-backend.onrender.com/send-email",
+          "https://urmila-webservice.onrender.com/send-email",
           {
             userData,
           },

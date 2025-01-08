@@ -28,7 +28,7 @@ const Login = () => {
     setLoading(true); // Set loader to true when request starts
 
     try {
-      const response = await axios.post('https://urmila-backend.onrender.com/login', {
+      const response = await axios.post('https://urmila-webservice.onrender.com/login', {
         email,
         password,
       });

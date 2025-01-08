@@ -12,7 +12,7 @@ const AboutUs = () => {
       // Fetch team members from the database
       const fetchTeamMembers = async () => {
         try {
-          const response = await fetch("https://urmila-backend.onrender.com/team");
+          const response = await fetch("https://urmila-webservice.onrender.com/team");
           const data = await response.json();
           setTeamMembers(data);
         } catch (error) {

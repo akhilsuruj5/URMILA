@@ -21,7 +21,7 @@ export default function MentorshipPage() {
 
     try {
       const response = await axios.get(
-        "https://urmila-backend.onrender.com/user",
+        "https://urmila-webservice.onrender.com/user",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -35,13 +35,13 @@ export default function MentorshipPage() {
       if (error.response && error.response.status === 401) {
         try {
           const refreshResponse = await axios.post(
-            "https://urmila-backend.onrender.com/refresh-token"
+            "https://urmila-webservice.onrender.com/refresh-token"
           );
           token = refreshResponse.data.accessToken;
           localStorage.setItem("token", token);
 
           const retryResponse = await axios.get(
-            "https://urmila-backend.onrender.com/user",
+            "https://urmila-webservice.onrender.com/user",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -78,7 +78,7 @@ export default function MentorshipPage() {
   
     try {
       const response = await axios.post(
-        "https://urmila-backend.onrender.com/api/register/mentorship",
+        "https://urmila-webservice.onrender.com/api/register/mentorship",
         { userId: user._doc._id, mentorshipType },
         {
           headers: {
@@ -88,7 +88,7 @@ export default function MentorshipPage() {
       );
       if (response.status === 201) {
         const emailResponse = await axios.post(
-          "https://urmila-backend.onrender.com/send-mentorship-email",
+          "https://urmila-webservice.onrender.com/send-mentorship-email",
           {
             user: user._doc,mentorshipType
           },

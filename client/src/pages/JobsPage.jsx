@@ -26,7 +26,7 @@ const JobsPage = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch("http://localhost:5000/jobs"); // Adjust the endpoint if needed
+        const response = await fetch("https://urmila-webservice.onrender.com/jobs"); // Adjust the endpoint if needed
         if (!response.ok) {
           throw new Error("Failed to fetch jobs");
         }

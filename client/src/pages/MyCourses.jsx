@@ -35,7 +35,7 @@ const MyCourses = () => {
 
       try {
         const response = await axios.get(
-          "https://urmila-backend.onrender.com/user",
+          "https://urmila-webservice.onrender.com/user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ const MyCourses = () => {
   
   try {
     const response = await axios.get(
-      `https://urmila-backend.onrender.com/api/registrations/enrolled?userId=${user._doc._id}`,
+      `https://urmila-webservice.onrender.com/api/registrations/enrolled?userId=${user._doc._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -101,7 +101,7 @@ const MyCourses = () => {
     const fetchAllCourses = async () => {
       try {
         const response = await axios.get(
-          "https://urmila-backend.onrender.com/api/courses" // Update with your API URL
+          "https://urmila-webservice.onrender.com/api/courses" // Update with your API URL
         );
         setAllCourses(response.data); // Assign fetched courses to the state
         setIsLoading(false); // Mark loading as complete

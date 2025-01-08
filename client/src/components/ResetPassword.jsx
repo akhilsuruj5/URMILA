@@ -18,7 +18,7 @@
   //   }
 
   //   try {
-  //     const response = await axios.post(`http://localhost:5000/reset-password/${token}`, { password });
+  //     const response = await axios.post(`https://urmila-webservice.onrender.com/reset-password/${token}`, { password });
   //     setMessage(response.data.msg);
   //     setError("");
   //     navigate("/login"); 
@@ -94,7 +94,7 @@ export default function ResetPassword() {
     }
 
     try {
-      const response = await axios.post(`https://urmila-backend.onrender.com/reset-password/${token}`, { password });
+      const response = await axios.post(`https://urmila-webservice.onrender.com/reset-password/${token}`, { password });
       setMessage(response.data.msg);
       setError("");
       setIsSubmitted(true)

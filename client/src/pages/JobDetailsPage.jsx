@@ -39,7 +39,7 @@
 //   useEffect(() => {
 //     const fetchJobDetails = async () => {
 //       try {
-//         const response = await axios.get(`http://localhost:5000/jobs/${jobId}`);
+//         const response = await axios.get(`https://urmila-webservice.onrender.com/jobs/${jobId}`);
 //         setJob(response.data);
 //         setLoading(false);
 //       } catch (err) {
@@ -63,7 +63,7 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     try {
-//       await axios.post(`http://localhost:5000/jobs/${jobId}/apply`, formData);
+//       await axios.post(`https://urmila-webservice.onrender.com/jobs/${jobId}/apply`, formData);
 //       toast.success('Application submitted successfully!');
 //       setIsModalOpen(false);
 //     } catch (error) {
@@ -310,7 +310,7 @@ const JobDetailsPage = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:5000/jobs/${jobId}`,
+          `https://urmila-webservice.onrender.com/jobs/${jobId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -319,7 +319,7 @@ const JobDetailsPage = () => {
 
         // Check if the user has already applied for the job
         const applicationStatus = await axios.get(
-          `http://localhost:5000/jobs/${jobId}/application-status`,
+          `https://urmila-webservice.onrender.com/jobs/${jobId}/application-status`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -352,7 +352,7 @@ const JobDetailsPage = () => {
     if (confirmed) {
       try {
         await axios.post(
-          `http://localhost:5000/jobs/${jobId}/apply`,
+          `https://urmila-webservice.onrender.com/jobs/${jobId}/apply`,
           {}, // Empty body
           {
             headers: { Authorization: `Bearer ${token}` }, // Correct header structure
