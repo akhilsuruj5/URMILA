@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const sgMail = require("@sendgrid/mail");
+const { MailtrapClient } = require("mailtrap");
 
 function truthy(v) {
   return ["1", "true", "yes", "on"].includes(String(v || "").toLowerCase());
@@ -18,17 +18,43 @@ function getSmtpConfig() {
   return { host, port, secure, user, pass };
 }
 
-async function sendMail({ to, subject, html, from }) {
-  // Prefer SendGrid on Render (HTTPS/443) to avoid SMTP connectivity issues.
-  if (process.env.SENDGRID_API_KEY) {
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    const sgFrom = from || process.env.SENDGRID_FROM || process.env.EMAIL_USER;
-    if (!sgFrom) throw new Error("Missing SENDGRID_FROM (or EMAIL_USER) for SendGrid sender");
-    await sgMail.send({
-      to,
-      from: sgFrom,
+function normalizeRecipients(to) {
+  if (!to) return [];
+  if (Array.isArray(to)) {
+    return to.map((email) => ({ email }));
+  }
+  return [{ email: to }];
+}
+
+async function sendMail({ to, subject, html, from, text, category }) {
+  // Prefer Mailtrap API (HTTPS) when configured to avoid SMTP connectivity issues on PaaS hosts.
+  if (process.env.MAILTRAP_TOKEN) {
+    const client = new MailtrapClient({ token: process.env.MAILTRAP_TOKEN });
+
+    const senderEmail =
+      (typeof from === "string" ? from : from?.email) ||
+      process.env.MAILTRAP_FROM_EMAIL ||
+      process.env.EMAIL_FROM ||
+      process.env.EMAIL_USER;
+    const senderName =
+      (typeof from === "object" ? from?.name : undefined) ||
+      process.env.MAILTRAP_FROM_NAME ||
+      "URMILA";
+
+    if (!senderEmail) {
+      throw new Error("Missing MAILTRAP_FROM_EMAIL (or EMAIL_FROM/EMAIL_USER) for Mailtrap sender");
+    }
+
+    const recipients = normalizeRecipients(to);
+    if (recipients.length === 0) throw new Error("Missing recipient email");
+
+    await client.send({
+      from: { email: senderEmail, name: senderName },
+      to: recipients,
       subject,
+      text: text || (html ? html.replace(/<[^>]*>/g, "") : undefined),
       html,
+      category: category || process.env.MAILTRAP_CATEGORY || "Transactional",
     });
     return;
   }
@@ -52,7 +78,8 @@ async function sendMail({ to, subject, html, from }) {
     },
   });
 
-  const mailFrom = from || process.env.EMAIL_FROM || user;
+  const mailFrom =
+    (typeof from === "string" ? from : from?.email) || process.env.EMAIL_FROM || user;
 
   // Additional overall timeout guard
   const sendPromise = transporter.sendMail({
@@ -60,6 +87,7 @@ async function sendMail({ to, subject, html, from }) {
     to,
     subject,
     html,
+    text,
   });
   const hardTimeoutMs = Number(process.env.EMAIL_SEND_TIMEOUT_MS || 15_000);
   const timeoutPromise = new Promise((_, reject) =>

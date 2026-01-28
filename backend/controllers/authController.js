@@ -14,8 +14,8 @@ const register = async (req, res) => {
     }
 
     // Email can be delivered via SendGrid (preferred) or SMTP. Fail fast if neither is configured.
-    if (!process.env.SENDGRID_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) && (!process.env.SMTP_USER || !process.env.SMTP_PASS)) {
-      console.error("Email service not configured. Set SENDGRID_API_KEY or SMTP/EMAIL creds.");
+    if (!process.env.MAILTRAP_TOKEN && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) && (!process.env.SMTP_USER || !process.env.SMTP_PASS)) {
+      console.error("Email service not configured. Set MAILTRAP_TOKEN or SMTP/EMAIL creds.");
       return res.status(500).json({ msg: "Email service not configured. Please contact support." });
     }
 
