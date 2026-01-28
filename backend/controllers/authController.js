@@ -8,8 +8,17 @@ const register = async (req, res) => {
   try {
     const { name, email, password, phone, occupation, institution } = req.body;
 
+    console.log("[REGISTER] incoming request", {
+      name,
+      email,
+      phone,
+      occupation,
+      institution,
+    });
+
     // Validate required fields
     if (!name || !email || !password) {
+      console.warn("[REGISTER] missing required fields", { name, email, hasPassword: !!password });
       return res.status(400).json({ msg: "Name, email, and password are required" });
     }
 
@@ -19,13 +28,20 @@ const register = async (req, res) => {
       return res.status(500).json({ msg: "Email service not configured. Please contact support." });
     }
 
+    console.log("[REGISTER] email service appears configured");
+
     const existingUser = await User.findOne({ email });
+    console.log("[REGISTER] existingUser lookup complete", {
+      found: !!existingUser,
+      isVerified: existingUser?.isVerified,
+    });
     if (existingUser && existingUser.isVerified) {
       return res.status(400).json({ msg: "Email already registered" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log("[REGISTER] password hashed and OTP generated");
 
     if (existingUser) {
       existingUser.password = hashedPassword;
@@ -35,6 +51,7 @@ const register = async (req, res) => {
       existingUser.otp = otp;
       existingUser.isVerified = false;
       await existingUser.save();
+      console.log("[REGISTER] updated existing unverified user", { userId: existingUser._id });
     } else {
       const newUser = new User({
         name,
@@ -48,8 +65,10 @@ const register = async (req, res) => {
       });
 
       await newUser.save();
+      console.log("[REGISTER] created new user", { userId: newUser._id });
     }
 
+    console.log("[REGISTER] sending OTP email");
     await sendMail({
       to: email,
       subject: "Email Verification OTP",
@@ -65,6 +84,8 @@ const register = async (req, res) => {
         </div>
       `,
     });
+
+    console.log("[REGISTER] OTP email sendMail() resolved successfully");
 
     res.status(201).json({
       msg: "OTP sent to your email. Please check your email to verify.",

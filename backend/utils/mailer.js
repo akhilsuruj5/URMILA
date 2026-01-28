@@ -42,6 +42,11 @@ async function sendMail({ to, subject, html, from, text, category }) {
   const mailFrom =
     (typeof from === "string" ? from : from?.email) || process.env.EMAIL_FROM || user;
 
+  // Log before sending
+  console.log(
+    `[MAIL] attempting SMTP send host=${host}:${port} secure=${secure} from=${mailFrom} to=${to} subject="${subject}"`
+  );
+
   // Additional overall timeout guard
   const sendPromise = transporter.sendMail({
     from: mailFrom,
