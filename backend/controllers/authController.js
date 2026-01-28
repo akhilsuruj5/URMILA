@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 const User = require("../models/User");
+const { sendMail } = require("../utils/mailer");
 
 const register = async (req, res) => {
   try {
@@ -13,9 +13,9 @@ const register = async (req, res) => {
       return res.status(400).json({ msg: "Name, email, and password are required" });
     }
 
-    // Check if email credentials are configured
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error("EMAIL_USER or EMAIL_PASS environment variables are not set");
+    // Email can be delivered via SendGrid (preferred) or SMTP. Fail fast if neither is configured.
+    if (!process.env.SENDGRID_API_KEY && (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) && (!process.env.SMTP_USER || !process.env.SMTP_PASS)) {
+      console.error("Email service not configured. Set SENDGRID_API_KEY or SMTP/EMAIL creds.");
       return res.status(500).json({ msg: "Email service not configured. Please contact support." });
     }
 
@@ -50,36 +50,7 @@ const register = async (req, res) => {
       await newUser.save();
     }
 
-    // Configure nodemailer with timeout settings
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      connectionTimeout: 10000, // 10 seconds timeout for connection
-      greetingTimeout: 10000,   // 10 seconds timeout for greeting
-      socketTimeout: 10000,      // 10 seconds timeout for socket
-      // Add pool configuration for better reliability
-      pool: true,
-      maxConnections: 1,
-      maxMessages: 3,
-    });
-
-    // Verify transporter connection before sending
-    try {
-      await transporter.verify();
-      console.log("SMTP server is ready to send emails");
-    } catch (verifyError) {
-      console.error("SMTP verification failed:", verifyError);
-      // Still try to send, but log the error
-    }
-
-    // Send email with timeout wrapper
-    const sendEmailPromise = transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: email,
       subject: "Email Verification OTP",
       html: `
@@ -94,14 +65,6 @@ const register = async (req, res) => {
         </div>
       `,
     });
-
-    // Add a timeout wrapper (15 seconds max)
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error("Email sending timeout after 15 seconds")), 15000);
-    });
-
-    await Promise.race([sendEmailPromise, timeoutPromise]);
-    console.log(`OTP email sent successfully to ${email}`);
 
     res.status(201).json({
       msg: "OTP sent to your email. Please check your email to verify.",
@@ -182,18 +145,7 @@ const forgotPassword = async (req, res) => {
 
     const resetURL = `https://www.urmila.academy/reset-password/${resetToken}`;
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: email,
       subject: "Password Reset Request",
       html: `

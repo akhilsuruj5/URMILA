@@ -2,23 +2,13 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 const Admin = require("../models/Admin");
 const crypto = require("crypto");
 const Offering = require('../models/Offerings');
 const Registration = require('../models/Registration'); 
 const Testimonial = require('../models/Testimonial');
 const User = require('../models/User');
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.hostinger.com', // Use your SMTP host
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const { sendMail } = require("../utils/mailer");
 
 const adminLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -80,8 +70,7 @@ const signupAdmin = async (req, res) => {
     await newAdmin.save();
 
     const verificationUrl = `https://admin.urmila.academy/admin/verify-account/${newAdmin.verificationToken}`;
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: "support@urmila.academy", // Support email
       subject: "New Admin Signup - Pending Verification",
       html: `
@@ -124,18 +113,7 @@ const verifyEmail = async (req, res) => {
     admin.verificationToken = null;
     await admin.save();
 
-    const transporter = nodemailer.createTransport({
-      host: "smtp.hostinger.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: admin.email,
       subject: "Your Admin Account Has Been Verified",
       html: `<p>Dear ${admin.name},</p><p>Your admin account has been successfully verified. You can now log in to the admin dashboard.</p>`,

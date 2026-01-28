@@ -1,17 +1,7 @@
-const nodemailer = require('nodemailer');
+const { sendMail } = require("../utils/mailer");
 
 const sendEmail = async (req, res) => {
   const { name, email, phone, occupation, institution, title } = req.body.userData;
-
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.hostinger.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
 
   const userEmailContent = `
     <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
@@ -45,17 +35,15 @@ const sendEmail = async (req, res) => {
   `;
 
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: email,
       subject: `Registration Initiation: ${title}`,
       html: userEmailContent,
     });
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: process.env.EMAIL_USER,
-      subject: 'New Course Registration Request',
+      subject: "New Course Registration Request",
       html: adminEmailContent,
     });
 
@@ -69,16 +57,6 @@ const sendEmail = async (req, res) => {
 const sendMentorshipEmail = async (req, res) => {
   const { name, email, phone, occupation, institution } = req.body.user;
   const { mentorshipType } = req.body;
-
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.hostinger.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
 
   const userEmailContent = `
     <div style="font-family: Arial, sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4;">
@@ -112,17 +90,15 @@ const sendMentorshipEmail = async (req, res) => {
   `;
 
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: email,
       subject: `Registration Initiation: ${mentorshipType}`,
       html: userEmailContent,
     });
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: process.env.EMAIL_USER,
-      subject: 'New Mentorship Registration Request',
+      subject: "New Mentorship Registration Request",
       html: adminEmailContent,
     });
 

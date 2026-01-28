@@ -1,19 +1,9 @@
-const nodemailer = require('nodemailer');
 const Offering = require('../models/Offerings');
 const Registration = require('../models/Registration');
+const { sendMail } = require("../utils/mailer");
 
 const registerMentor = async (req, res) => {
   const { name, email, program } = req.body;
-
-  const transporter = nodemailer.createTransport({
-    host: "smtp.hostinger.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
 
   const userEmailContent = `
     <h2>Hi ${name},</h2>
@@ -34,15 +24,13 @@ const registerMentor = async (req, res) => {
   `;
 
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: email,
       subject: `Registration Confirmation for ${program}`,
       html: userEmailContent,
     });
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    await sendMail({
       to: process.env.EMAIL_USER,
       subject: `New Registration: ${name}`,
       html: adminEmailContent,
