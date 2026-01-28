@@ -8,6 +8,17 @@ const register = async (req, res) => {
   try {
     const { name, email, password, phone, occupation, institution } = req.body;
 
+    // Validate required fields
+    if (!name || !email || !password) {
+      return res.status(400).json({ msg: "Name, email, and password are required" });
+    }
+
+    // Check if email credentials are configured
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("EMAIL_USER or EMAIL_PASS environment variables are not set");
+      return res.status(500).json({ msg: "Email service not configured. Please contact support." });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser && existingUser.isVerified) {
       return res.status(400).json({ msg: "Email already registered" });
@@ -39,6 +50,7 @@ const register = async (req, res) => {
       await newUser.save();
     }
 
+    // Configure nodemailer with timeout settings
     const transporter = nodemailer.createTransport({
       host: "smtp.hostinger.com",
       port: 465,
@@ -47,9 +59,26 @@ const register = async (req, res) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      connectionTimeout: 10000, // 10 seconds timeout for connection
+      greetingTimeout: 10000,   // 10 seconds timeout for greeting
+      socketTimeout: 10000,      // 10 seconds timeout for socket
+      // Add pool configuration for better reliability
+      pool: true,
+      maxConnections: 1,
+      maxMessages: 3,
     });
 
-    await transporter.sendMail({
+    // Verify transporter connection before sending
+    try {
+      await transporter.verify();
+      console.log("SMTP server is ready to send emails");
+    } catch (verifyError) {
+      console.error("SMTP verification failed:", verifyError);
+      // Still try to send, but log the error
+    }
+
+    // Send email with timeout wrapper
+    const sendEmailPromise = transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
       subject: "Email Verification OTP",
@@ -66,11 +95,45 @@ const register = async (req, res) => {
       `,
     });
 
+    // Add a timeout wrapper (15 seconds max)
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Email sending timeout after 15 seconds")), 15000);
+    });
+
+    await Promise.race([sendEmailPromise, timeoutPromise]);
+    console.log(`OTP email sent successfully to ${email}`);
+
     res.status(201).json({
       msg: "OTP sent to your email. Please check your email to verify.",
     });
   } catch (error) {
-    res.status(500).json({ msg: "Error registering user" });
+    console.error("Error in register function:", error);
+    console.error("Error details:", {
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+      command: error.command,
+    });
+    
+    // Return more specific error messages
+    if (error.message.includes("timeout")) {
+      return res.status(500).json({ 
+        msg: "Email service timeout. Please try again or contact support.",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined
+      });
+    }
+    
+    if (error.code === "EAUTH" || error.responseCode === 535) {
+      return res.status(500).json({ 
+        msg: "Email authentication failed. Please contact support.",
+        error: process.env.NODE_ENV === "development" ? error.message : undefined
+      });
+    }
+
+    res.status(500).json({ 
+      msg: "Error registering user",
+      error: process.env.NODE_ENV === "development" ? error.message : undefined
+    });
   }
 };
 
