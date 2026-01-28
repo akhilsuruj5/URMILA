@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const { MailtrapClient } = require("mailtrap");
 
 function truthy(v) {
   return ["1", "true", "yes", "on"].includes(String(v || "").toLowerCase());
@@ -18,46 +17,8 @@ function getSmtpConfig() {
   return { host, port, secure, user, pass };
 }
 
-function normalizeRecipients(to) {
-  if (!to) return [];
-  if (Array.isArray(to)) {
-    return to.map((email) => ({ email }));
-  }
-  return [{ email: to }];
-}
-
 async function sendMail({ to, subject, html, from, text, category }) {
-  // Prefer Mailtrap API (HTTPS) when configured to avoid SMTP connectivity issues on PaaS hosts.
-  if (process.env.MAILTRAP_TOKEN) {
-    const client = new MailtrapClient({ token: process.env.MAILTRAP_TOKEN });
-
-    const senderEmail =
-      (typeof from === "string" ? from : from?.email) ||
-      process.env.MAILTRAP_FROM_EMAIL ||
-      process.env.EMAIL_FROM ||
-      process.env.EMAIL_USER;
-    const senderName =
-      (typeof from === "object" ? from?.name : undefined) ||
-      process.env.MAILTRAP_FROM_NAME ||
-      "URMILA";
-
-    if (!senderEmail) {
-      throw new Error("Missing MAILTRAP_FROM_EMAIL (or EMAIL_FROM/EMAIL_USER) for Mailtrap sender");
-    }
-
-    const recipients = normalizeRecipients(to);
-    if (recipients.length === 0) throw new Error("Missing recipient email");
-
-    await client.send({
-      from: { email: senderEmail, name: senderName },
-      to: recipients,
-      subject,
-      text: text || (html ? html.replace(/<[^>]*>/g, "") : undefined),
-      html,
-      category: category || process.env.MAILTRAP_CATEGORY || "Transactional",
-    });
-    return;
-  }
+  void category; // Not used for SMTP sends (Brevo SMTP doesn't need it)
 
   const { host, port, secure, user, pass } = getSmtpConfig();
   if (!user || !pass) throw new Error("Missing SMTP_USER/SMTP_PASS (or EMAIL_USER/EMAIL_PASS)");
@@ -94,7 +55,12 @@ async function sendMail({ to, subject, html, from, text, category }) {
     setTimeout(() => reject(new Error(`Email sending timeout after ${hardTimeoutMs}ms`)), hardTimeoutMs)
   );
 
-  await Promise.race([sendPromise, timeoutPromise]);
+  
+
+  const info = await Promise.race([sendPromise, timeoutPromise]);
+  console.log(
+    `[MAIL] sent via SMTP host=${host} from=${mailFrom} to=${to} subject="${subject}" messageId=${info?.messageId}`
+  );
 }
 
 module.exports = { sendMail, getSmtpConfig };
