@@ -72,7 +72,7 @@ const OurOfferings = () => {
   }, []);
 
   const filteredAllCourses = (allCourses || []).filter((course) =>
-    course?.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    (course?.name || course?.title)?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -97,12 +97,12 @@ const OurOfferings = () => {
             {(activeTab === "enrolled" ? enrolledCourses : filteredAllCourses).map(
               (course) => (
                 <div
-                  key={course.id}
+                  key={course._id || course.id}
                   className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-sm "
                 >
                   <img
                     src={course.image}
-                    alt={course.title}
+                    alt={course.name || course.title}
                     width={200}
                     height={100}
                     className="w-full h-40 object-cover"
@@ -110,7 +110,7 @@ const OurOfferings = () => {
                   <div className="p-4 min-h-[250px] flex flex-col justify-between space-y-4">
 
                     <h3 className="text-lg font-semibold line-clamp-2">
-                      {course.title}
+                      {course.name || course.title}
                     </h3>
                     <p className="text-gray-700 text-sm leading-6 line-clamp-6">
                       {course.description}
