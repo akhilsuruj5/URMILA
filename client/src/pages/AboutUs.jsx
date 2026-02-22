@@ -8,20 +8,20 @@ const AboutUs = () => {
     "Unified Resource Management Institute for Logistics and Analytics (URMILA)";
 
 
-    useEffect(() => {
-      // Fetch team members from the database
-      const fetchTeamMembers = async () => {
-        try {
-          const response = await fetch("https://urmila-webservice.onrender.com/team");
-          const data = await response.json();
-          setTeamMembers(data);
-        } catch (error) {
-          console.error("Error fetching team members:", error);
-        }
-      };
-  
-      fetchTeamMembers();
-    }, []);
+  useEffect(() => {
+    // Fetch team members from the database
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await fetch("https://urmila-webservice.onrender.com/team");
+        const data = await response.json();
+        setTeamMembers(data);
+      } catch (error) {
+        console.error("Error fetching team members:", error);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
 
 
 

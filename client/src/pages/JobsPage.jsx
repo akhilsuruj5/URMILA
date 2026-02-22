@@ -18,11 +18,11 @@ const JobsPage = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login'); 
+      navigate('/login');
     }
   }, [isAuthenticated, navigate]);
 
-  
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -54,7 +54,7 @@ const JobsPage = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <JobPageHeader />
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -98,7 +98,7 @@ const JobsPage = () => {
           {error && <p className="text-center text-red-500">{error}</p>}
 
           {!loading && !error && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -106,44 +106,44 @@ const JobsPage = () => {
             >
               {jobs.length > 0 ? (
                 jobs
-                .filter((job) => job.state === 'active')
-                .map((job) => (
-                  <motion.div
-                    key={job._id}
-                    whileHover={{ scale: 1.03 }}
-                    className="p-6 rounded-lg shadow-md bg-white border border-gray-200 flex flex-col"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="font-semibold text-lg text-green-700">{job.companyName}</h2>
-                      <div className="flex items-center text-gray-600">
-                        <MapPin size={16} className="mr-1" />
-                        <p className="text-sm">{job.location}</p>
-                      </div>
-                    </div>
-                    <h1 className="font-bold text-xl mb-2 text-gray-900">{job.title}</h1>
-                    <p className="text-sm text-gray-600 mb-4">{job.description.slice(0, 100)}...</p>
-                    <div className="flex flex-wrap gap-2 mt-auto mb-4">
-                      <span className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                        <Briefcase size={14} className="mr-1" />
-                        {job.positions} Positions
-                      </span>
-                      <span className="flex items-center bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
-                        <Clock size={14} className="mr-1" />
-                        {job.jobType}
-                      </span>
-                      <span className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                        {/* <RuppeSign size={14} className="mr-1" /> */}
-                        &#x20B9; {job.salary}
-                      </span>
-                    </div>
-                    <Link
-                      to={`/jobs/${job._id}`}
-                      className="block text-center bg-green-700 text-white mt-2 px-4 py-2 rounded-md hover:bg-green-800 transition-colors duration-300"
+                  .filter((job) => job.state === 'active')
+                  .map((job) => (
+                    <motion.div
+                      key={job._id}
+                      whileHover={{ scale: 1.03 }}
+                      className="p-6 rounded-lg shadow-md bg-white border border-gray-200 flex flex-col"
                     >
-                      View Details
-                    </Link>
-                  </motion.div>
-                ))
+                      <div className="flex items-center justify-between mb-4">
+                        <h2 className="font-semibold text-lg text-green-700">{job.companyName}</h2>
+                        <div className="flex items-center text-gray-600">
+                          <MapPin size={16} className="mr-1" />
+                          <p className="text-sm">{job.location}</p>
+                        </div>
+                      </div>
+                      <h1 className="font-bold text-xl mb-2 text-gray-900">{job.title}</h1>
+                      <p className="text-sm text-gray-600 mb-4">{job.description.slice(0, 100)}...</p>
+                      <div className="flex flex-wrap gap-2 mt-auto mb-4">
+                        <span className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                          <Briefcase size={14} className="mr-1" />
+                          {job.positions} Positions
+                        </span>
+                        <span className="flex items-center bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm">
+                          <Clock size={14} className="mr-1" />
+                          {job.jobType}
+                        </span>
+                        <span className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                          {/* <RuppeSign size={14} className="mr-1" /> */}
+                          &#x20B9; {job.salary}
+                        </span>
+                      </div>
+                      <Link
+                        to={`/jobs/${job._id}`}
+                        className="block text-center bg-green-700 text-white mt-2 px-4 py-2 rounded-md hover:bg-green-800 transition-colors duration-300"
+                      >
+                        View Details
+                      </Link>
+                    </motion.div>
+                  ))
               ) : (
                 <p className="text-center text-gray-700 col-span-full">No jobs available</p>
               )}

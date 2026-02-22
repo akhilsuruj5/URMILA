@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CheckCircle, Users } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify"; 
-import "react-toastify/dist/ReactToastify.css";  
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 export default function MentorshipPage() {
@@ -53,12 +53,12 @@ export default function MentorshipPage() {
         } catch (refreshError) {
           console.error("Error refreshing token:", refreshError);
           setError("Session expired, please log in again.");
-          toast.error("Session expired, please log in again.");  
+          toast.error("Session expired, please log in again.");
           localStorage.removeItem("token");
         }
       } else {
         setError("Error fetching user details");
-        toast.error("Error fetching user details");  
+        toast.error("Error fetching user details");
       }
     }
   };
@@ -72,10 +72,10 @@ export default function MentorshipPage() {
       navigate("/login");
       return;
     }
-  
+
     setLoading(true);
     setMessage(null);
-  
+
     try {
       const response = await axios.post(
         "https://urmila-webservice.onrender.com/api/register/mentorship",
@@ -90,7 +90,7 @@ export default function MentorshipPage() {
         const emailResponse = await axios.post(
           "https://urmila-webservice.onrender.com/send-mentorship-email",
           {
-            user: user._doc,mentorshipType
+            user: user._doc, mentorshipType
           },
           {
             headers: {
@@ -98,13 +98,13 @@ export default function MentorshipPage() {
             },
           }
         );
-  
+
         if (emailResponse.status === 200) {
           setMessage({ type: "success", text: response.data.message });
-        toast.success(response.data.message);
+          toast.success(response.data.message);
         } else if (response.status === 400 && response.data.error === 'You are already registered for this mentorship.') {
           setMessage({ type: "error", text: response.data.error });
-          toast.info(response.data.error); 
+          toast.info(response.data.error);
         }
         else {
           toast.error("Failed to register for the course. Please try again.");
@@ -115,18 +115,18 @@ export default function MentorshipPage() {
     } catch (error) {
       if (error.response.status === 400 && error.response.data.error === 'You are already registered for this mentorship.') {
         setMessage({ type: "error", text: error.response.data.error });
-        toast.info(error.response.data.error); 
+        toast.info(error.response.data.error);
       } else if (error.request) {
         console.log("Error request:", error.request);
         setMessage({ type: "error", text: error.response.data.error });
-        toast.error(error.response.data.error); 
+        toast.error(error.response.data.error);
       }
-      
+
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8 md:py-12">
@@ -150,11 +150,10 @@ export default function MentorshipPage() {
           </Button>
           {message && (
             <div
-              className={`mt-4 text-lg ${
-                message.type === "success"
+              className={`mt-4 text-lg ${message.type === "success"
                   ? "text-green-600"
                   : "text-red-600"
-              }`}
+                }`}
             >
               {message.text}
             </div>
@@ -174,7 +173,7 @@ export default function MentorshipPage() {
         </div>
       </div>
 
-      <ToastContainer />  
+      <ToastContainer />
     </div>
   );
 }
@@ -214,9 +213,8 @@ function CardContent({ children }) {
 function Button({ children, onClick, disabled }) {
   return (
     <button
-      className={`bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full text-base sm:text-lg transition duration-300 ease-in-out transform ${
-        disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
-      }`}
+      className={`bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full text-base sm:text-lg transition duration-300 ease-in-out transform ${disabled ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
+        }`}
       onClick={onClick}
       disabled={disabled}
     >

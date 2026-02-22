@@ -97,7 +97,7 @@ const CompleteRegistration = () => {
               onChange={handleInputChange}
               required
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
-              
+
             >
               <option value="" disabled>Select Occupation</option>
               <option value="Student">Student</option>

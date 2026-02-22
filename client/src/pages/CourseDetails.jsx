@@ -20,7 +20,7 @@ const CourseDetails = () => {
         const response = await axios.get(
           `https://urmila-webservice.onrender.com/api/courses/${courseId}`
         );
-        setCourse(response.data); 
+        setCourse(response.data);
       } catch (error) {
         console.error("Error fetching course details:", error);
         toast.error("Failed to load course details.");
@@ -93,7 +93,7 @@ const CourseDetails = () => {
 
   const handleRegister = async () => {
     setIsLoading(true);
-  
+
     // console.log(course);
     if (course.name === undefined) {
       toast.error("Course details not loaded. Please try again.");
@@ -111,9 +111,9 @@ const CourseDetails = () => {
       institution: user._doc.institution,
       title: course.name,
     };
-  
+
     let token = localStorage.getItem("token");
-  
+
     try {
       const registrationResponse = await axios.post(
         "https://urmila-webservice.onrender.com/api/register/course",
@@ -127,7 +127,7 @@ const CourseDetails = () => {
           },
         }
       );
-  
+
       if (registrationResponse.status === 201) {
         const emailResponse = await axios.post(
           "https://urmila-webservice.onrender.com/send-email",
@@ -140,7 +140,7 @@ const CourseDetails = () => {
             },
           }
         );
-  
+
         if (emailResponse.status === 200) {
           toast.success(
             "Enrollment initiated! A confirmation email has been sent."
@@ -154,7 +154,7 @@ const CourseDetails = () => {
       }
     } catch (error) {
       console.error("Error enrolling in course:", error);
-  
+
       if (
         error.response &&
         error.response.status === 400 &&
@@ -168,67 +168,66 @@ const CourseDetails = () => {
       setIsLoading(false);
     }
   };
-  
+
 
   if (!course) return null;
 
   return (
     <div className="min-h-screen">
-    <ToastContainer />
-    <div className="bg-white ">
-      <div className="mb-10">
-        {course.image ? (
-          <img
-            src={course.image}
-            alt={course.title}
-            className="w-full max-h-80 object-cover "
-          />
-        ) : (
-          <div className="w-full max-h-60 bg-gray-200 flex items-center justify-center rounded-md text-gray-500">
-            Image Unavailable
-          </div>
-        )}
-      </div>
-  
-      <h1 className="text-2xl md:text-3xl font-bold mb-4 px-4 md:px-8 lg:pl-32 text-gray-800">
-        {course.name}
-      </h1>
-  
-      <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-6 px-4 md:px-8 lg:px-32 lg:pr-60">
-        {course.description}
-      </p>
-  
-      <div className="px-4 md:px-8 lg:px-32">
-        <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-3">
-          Table of Content
-        </h2>
-        {course.tableOfContent && course.tableOfContent.length > 0 ? (
-          <ul className="list-disc pl-6 text-gray-700 leading-6">
-            {course.tableOfContent.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-500">No content available.</p>
-        )}
-      </div>
-  
-      <div className="px-4 md:px-8 lg:pl-32 mt-6 flex justify-center lg:justify-start">
-        <button
-          className={`w-full md:w-auto px-6 md:px-12 py-3 text-sm rounded-md ${
-            isLoading
-              ? "bg-gray-400 text-white"
-              : "bg-green-600 text-white hover:bg-green-700"
-          }`}
-          onClick={handleRegister}
-          disabled={isLoading}
-        >
-          {isLoading ? "Registering..." : "Register"}
-        </button>
+      <ToastContainer />
+      <div className="bg-white ">
+        <div className="mb-10">
+          {course.image ? (
+            <img
+              src={course.image}
+              alt={course.title}
+              className="w-full max-h-80 object-cover "
+            />
+          ) : (
+            <div className="w-full max-h-60 bg-gray-200 flex items-center justify-center rounded-md text-gray-500">
+              Image Unavailable
+            </div>
+          )}
+        </div>
+
+        <h1 className="text-2xl md:text-3xl font-bold mb-4 px-4 md:px-8 lg:pl-32 text-gray-800">
+          {course.name}
+        </h1>
+
+        <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-6 px-4 md:px-8 lg:px-32 lg:pr-60">
+          {course.description}
+        </p>
+
+        <div className="px-4 md:px-8 lg:px-32">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-3">
+            Table of Content
+          </h2>
+          {course.tableOfContent && course.tableOfContent.length > 0 ? (
+            <ul className="list-disc pl-6 text-gray-700 leading-6">
+              {course.tableOfContent.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No content available.</p>
+          )}
+        </div>
+
+        <div className="px-4 md:px-8 lg:pl-32 mt-6 flex justify-center lg:justify-start">
+          <button
+            className={`w-full md:w-auto px-6 md:px-12 py-3 text-sm rounded-md ${isLoading
+                ? "bg-gray-400 text-white"
+                : "bg-green-600 text-white hover:bg-green-700"
+              }`}
+            onClick={handleRegister}
+            disabled={isLoading}
+          >
+            {isLoading ? "Registering..." : "Register"}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-  
+
   );
 };
 

@@ -17,28 +17,28 @@ export default function Profile() {
     institution: '',
   })
   const [isLoading, setIsLoading] = useState(true)
-  
+
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const fetchUserData = async () => {
     let token = localStorage.getItem('token');
-    
+
     if (!token) {
       setError('User not found, please log in again.');
       toast.error('User not found, please log in again.');
-  
+
       return;
     }
-  
+
     try {
       const response = await axios.get('https://urmila-webservice.onrender.com/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       return response.data._doc;
-      
+
     } catch (error) {
       console.error('Error fetching user data:', error);
       if (error.response && error.response.status === 401) {
@@ -47,14 +47,14 @@ export default function Profile() {
           const refreshResponse = await axios.post('https://urmila-webservice.onrender.com/refresh-token');
           token = refreshResponse.data.accessToken;
           localStorage.setItem('token', token);
-  
+
           // Retry fetching user data
           const retryResponse = await axios.get('https://urmila-webservice.onrender.com/user', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-          
+
           return await retryResponse.json();
         } catch (refreshError) {
           console.error('Error refreshing token:', refreshError);
@@ -116,7 +116,7 @@ export default function Profile() {
 
   return (
     <div className="container mx-auto p-4">
-      <ToastContainer /> 
+      <ToastContainer />
       <div
         className="bg-white pb-20 rounded-lg p-6 w-full max-w-2xl mx-auto"
       >

@@ -22,7 +22,7 @@ const BrowseJobs = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login'); 
+      navigate('/login');
     }
   }, [isAuthenticated, navigate]);
 
@@ -43,7 +43,7 @@ const BrowseJobs = () => {
   }, []);
 
   const applyFilters = useCallback(() => {
-    let filtered = jobs.filter(job => 
+    let filtered = jobs.filter(job =>
       job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.location.toLowerCase().includes(searchQuery.toLowerCase())
@@ -105,10 +105,10 @@ const BrowseJobs = () => {
             {!loading && !error && (
               <div className="space-y-4">
                 {filteredJobs
-                .filter((job) => job.state === 'active')
-                .map(job => (
-                  <JobCard key={job._id} job={job} />
-                ))}
+                  .filter((job) => job.state === 'active')
+                  .map(job => (
+                    <JobCard key={job._id} job={job} />
+                  ))}
                 {filteredJobs.length === 0 && (
                   <p className="text-center text-gray-700">No jobs found matching your criteria.</p>
                 )}

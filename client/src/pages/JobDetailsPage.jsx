@@ -364,7 +364,7 @@ const JobDetailsPage = () => {
         console.error("Error submitting application:", error);
         toast.error(
           error.response?.data?.message ||
-            "Failed to submit application. Please try again."
+          "Failed to submit application. Please try again."
         );
       }
     }
@@ -424,11 +424,10 @@ const JobDetailsPage = () => {
             <button
               onClick={handleApply}
               disabled={hasApplied} // Disable button if already applied
-              className={`px-6 py-3 rounded-md transition-colors duration-300 ${
-                hasApplied
+              className={`px-6 py-3 rounded-md transition-colors duration-300 ${hasApplied
                   ? "bg-gray-300 cursor-not-allowed"
                   : "bg-green-700 text-white hover:bg-green-800"
-              }`}
+                }`}
             >
               {hasApplied ? "Applied" : "Apply Now"}
             </button>

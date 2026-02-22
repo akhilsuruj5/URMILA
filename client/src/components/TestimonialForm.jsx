@@ -28,7 +28,7 @@ const TestimonialForm = ({ courses }) => {
       });
 
       e.target.reset();
-  
+
     } catch (error) {
       toast.error("Failed to submit testimonial");
     }

@@ -53,12 +53,12 @@ const AssignmentMentorship = () => {
         } catch (refreshError) {
           console.error("Error refreshing token:", refreshError);
           setError("Session expired, please log in again.");
-          toast.error("Session expired, please log in again."); 
+          toast.error("Session expired, please log in again.");
           localStorage.removeItem("token");
         }
       } else {
         setError("Error fetching user details");
-        toast.error("Error fetching user details"); 
+        toast.error("Error fetching user details");
       }
     }
   };
@@ -74,12 +74,12 @@ const AssignmentMentorship = () => {
     }
 
     setLoading(true);
-    setMessage(null); 
+    setMessage(null);
 
     try {
       const response = await axios.post(
         "https://urmila-webservice.onrender.com/api/register/mentorship",
-        { userId: user._doc._id, mentorshipType: "Assignment-Based Mentorship" }, 
+        { userId: user._doc._id, mentorshipType: "Assignment-Based Mentorship" },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -100,13 +100,13 @@ const AssignmentMentorship = () => {
             },
           }
         );
-  
+
         if (emailResponse.status === 200) {
           setMessage({ type: "success", text: response.data.message });
-        toast.success(response.data.message);
+          toast.success(response.data.message);
         } else if (response.status === 400 && response.data.error === 'You are already registered for this mentorship.') {
           setMessage({ type: "error", text: response.data.error });
-          toast.info(response.data.error); 
+          toast.info(response.data.error);
         }
         else {
           toast.error("Failed to register for the course. Please try again.");
@@ -117,13 +117,13 @@ const AssignmentMentorship = () => {
     } catch (error) {
       if (error.response.status === 400 && error.response.data.error === 'You are already registered for this mentorship.') {
         setMessage({ type: "error", text: error.response.data.error });
-        toast.info(error.response.data.error); 
+        toast.info(error.response.data.error);
       } else if (error.request) {
         console.log("Error request:", error.request);
         setMessage({ type: "error", text: error.response.data.error });
-        toast.error(error.response.data.error); 
+        toast.error(error.response.data.error);
       }
-      
+
     } finally {
       setLoading(false);
     }

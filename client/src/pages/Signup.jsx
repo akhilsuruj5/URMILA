@@ -224,16 +224,16 @@ const Signup = () => {
               )}
             </div>
             <div className="text-center mt-4">
-  <p className="text-sm text-gray-600">
-    By signing up, you agree to our{' '}
-    <a 
-      href="/terms-and-conditions" 
-      className="text-blue-500 hover:underline"
-    >
-      Terms and Conditions
-    </a>.
-  </p>
-</div>
+              <p className="text-sm text-gray-600">
+                By signing up, you agree to our{' '}
+                <a
+                  href="/terms-and-conditions"
+                  className="text-blue-500 hover:underline"
+                >
+                  Terms and Conditions
+                </a>.
+              </p>
+            </div>
             <button
               type="submit"
               className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-colors"
@@ -301,11 +301,10 @@ const Signup = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-2 rounded-md text-lg transition-colors ${
-                isLoading
+              className={`w-full py-2 rounded-md text-lg transition-colors ${isLoading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-600 hover:bg-green-700 text-white"
-              }`}
+                }`}
             >
               {isLoading ? "Sending OTP..." : "Submit"}
             </button>
@@ -347,11 +346,10 @@ const Signup = () => {
             <button
               onClick={handleSubmit}
               disabled={isLoading}
-              className={`w-full py-2 rounded-md text-lg transition-colors ${
-                isLoading
+              className={`w-full py-2 rounded-md text-lg transition-colors ${isLoading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+                }`}
             >
               {isLoading ? "Verifying..." : "Verify OTP"}
             </button>
